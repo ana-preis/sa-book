@@ -1,6 +1,6 @@
-package com.example.sayoutube.Repository;
+package com.sa.youtube.Repository;
 
-import com.example.sayoutube.Models.Video;
+import com.sa.youtube.Models.Video;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import java.util.Optional;

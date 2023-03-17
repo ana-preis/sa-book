@@ -1,10 +1,11 @@
-package com.example.sayoutube.Models;
+package com.sa.youtube.Models;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -12,16 +13,17 @@ import java.util.UUID;
 @NoArgsConstructor
 @Data
 @Entity
-public class Group {
+public class Playlist {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    private String name;
-    private String description;
-    @OneToMany(cascade = CascadeType.ALL)
-    private ArrayList<User> userList;
     @OneToMany(cascade = CascadeType.ALL)
     private ArrayList<Video> videoList;
-    @OneToMany(cascade = CascadeType.ALL)
-    private ArrayList<ForumMessage> forumMessages;
+    private LocalDateTime publishedAt;
+    private String channelID;
+    private String title;
+    private String description;
+    @ElementCollection
+    private ArrayList<String> tags;
+    private String url;
 }

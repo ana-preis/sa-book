@@ -1,11 +1,10 @@
-package com.example.sayoutube.Models;
+package com.sa.youtube.Models;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.Data;
 
-import javax.validation.constraints.Email;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;

@@ -1,4 +1,4 @@
-package com.example.sayoutube;
+package com.sa.youtube;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
