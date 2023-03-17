@@ -1,4 +1,4 @@
-package com.sa.youtube.Models;
+package com.sa.youtube.models;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

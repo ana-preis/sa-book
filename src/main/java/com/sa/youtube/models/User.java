@@ -1,4 +1,4 @@
-package com.sa.youtube.Models;
+package com.sa.youtube.models;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
