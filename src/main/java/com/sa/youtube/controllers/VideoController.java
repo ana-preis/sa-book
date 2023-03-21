@@ -1,5 +1,6 @@
 package com.sa.youtube.controllers;
 
+import com.sa.youtube.controllers.dtos.VideoDTO;
 import com.sa.youtube.models.Video;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

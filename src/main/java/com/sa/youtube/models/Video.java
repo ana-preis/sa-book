@@ -15,16 +15,15 @@ import java.util.UUID;
 @Entity
 public class Video {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    private String id;
     private String title;
     private String url;
     private String description;
     @ElementCollection
     private List<String> tags;
     private LocalDateTime publishedAt;
-    @ElementCollection
-    private List<String> reviewList;
+    @OneToMany
+    private List<Review> reviewList;
     private String channelID;
     private Long dislikeCount;
     private Long likeCount;
