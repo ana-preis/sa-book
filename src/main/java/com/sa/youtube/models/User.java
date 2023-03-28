@@ -28,4 +28,6 @@ public class User {
     private List<Video> toWatchList;
     @OneToMany(cascade = CascadeType.ALL)
     private List<Video> finishedList;
+    @Embedded
+    private File profilePicture;
 }

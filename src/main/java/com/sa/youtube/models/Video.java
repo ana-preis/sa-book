@@ -15,7 +15,7 @@ import java.util.UUID;
 @Entity
 public class Video {
     @Id
-    private String id;
+    private UUID id;
     private String title;
     private String url;
     private String description;
@@ -25,6 +25,7 @@ public class Video {
     @OneToMany
     private List<Review> reviewList;
     private String channelID;
+    private String channelName;
     private Long dislikeCount;
     private Long likeCount;
 }
