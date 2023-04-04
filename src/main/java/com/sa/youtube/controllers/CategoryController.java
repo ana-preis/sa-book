@@ -1,7 +1,6 @@
 package com.sa.youtube.controllers;
 
-import com.sa.youtube.models.Category;
-import com.sa.youtube.models.Video;
+import com.sa.youtube.controllers.dtos.CategoryDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,9 +16,9 @@ import java.util.UUID;
 public class CategoryController {
 
     @GetMapping
-    public ResponseEntity<List<Category>> searchCategories(@RequestParam(defaultValue = "") UUID id,
+    public ResponseEntity<List<CategoryDTO>> searchCategories(@RequestParam(defaultValue = "") UUID id,
                                                            @RequestParam(defaultValue = "") String title) {
-        List<Category> videoList = new ArrayList<>();
-        return ResponseEntity.ok(videoList);
+        List<CategoryDTO> categoryDTOListList = new ArrayList<>();
+        return ResponseEntity.ok(categoryDTOListList);
     }
 }
