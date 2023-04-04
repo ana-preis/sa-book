@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,9 +26,9 @@ public class User {
     private String email;
     private String password;
     @OneToMany(cascade = CascadeType.ALL)
-    private List<Video> toWatchList;
+    private List<Video> toWatchList = new ArrayList<>();
     @OneToMany(cascade = CascadeType.ALL)
-    private List<Video> finishedList;
+    private List<Video> finishedList = new ArrayList<>();
     @Embedded
     private File profilePicture;
 }

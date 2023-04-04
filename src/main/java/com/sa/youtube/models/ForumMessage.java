@@ -17,5 +17,5 @@ public class ForumMessage extends Message{
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     @ManyToOne(cascade = CascadeType.ALL)
-    private Group group;
+    private Category category;
 }

@@ -15,6 +15,6 @@ public record VideoDTO(
         List<String> reviewList,
         String channelID,
         Long dislikeCount,
-        Long likeCount) {
-
+        Long likeCount,
+        Long viewCount) {
 }

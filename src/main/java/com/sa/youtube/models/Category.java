@@ -6,22 +6,24 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Entity
-public class Group {
+public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     private String name;
     private String description;
     @OneToMany(cascade = CascadeType.ALL)
-    private ArrayList<User> userList;
+    private List<User> userList = new ArrayList<>();
     @OneToMany(cascade = CascadeType.ALL)
-    private ArrayList<Video> videoList;
+    private List<Video> videoList = new ArrayList<>();
     @OneToMany(cascade = CascadeType.ALL)
-    private ArrayList<ForumMessage> forumMessages;
+    private List<ForumMessage> forumMessages = new ArrayList<>();
+    private Long viewCount;
 }

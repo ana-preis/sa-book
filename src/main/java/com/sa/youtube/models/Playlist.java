@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -18,12 +19,12 @@ public class Playlist {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     @OneToMany(cascade = CascadeType.ALL)
-    private ArrayList<Video> videoList;
+    private List<Video> videoList = new ArrayList<>();
     private LocalDateTime publishedAt;
     private String channelID;
     private String title;
     private String description;
     @ElementCollection
-    private ArrayList<String> tags;
+    private List<String> tags = new ArrayList<>();
     private String url;
 }
