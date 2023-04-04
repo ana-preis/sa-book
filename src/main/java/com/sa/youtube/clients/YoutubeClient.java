@@ -8,9 +8,11 @@ import com.google.api.client.json.gson.GsonFactory;
 
 import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.model.PlaylistListResponse;
+import com.google.api.services.youtube.model.VideoListResponse;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.Arrays;
 import java.util.List;
 
 public class YoutubeClient {
@@ -41,13 +43,10 @@ public class YoutubeClient {
     public static void main(String[] args)
             throws GeneralSecurityException, IOException, GoogleJsonResponseException {
         YouTube youtubeService = getService();
-        List<String> playlistList = List.of("123456");
         // Define and execute the API request
-        YouTube.Playlists.List request = youtubeService.playlists()
-                .list(playlistList);
-        PlaylistListResponse response = request.setKey(DEVELOPER_KEY)
-                .setChannelId("12455")
-                .execute();
+        YouTube.Videos.List request = youtubeService.videos()
+                .list(Arrays.asList("snippet"));
+        VideoListResponse response = request.setKey(DEVELOPER_KEY).setId(Arrays.asList("6EI1K4qP8YI")).execute();
         System.out.println(response);
     }
 }
