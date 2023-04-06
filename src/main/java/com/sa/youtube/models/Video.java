@@ -16,16 +16,18 @@ import java.util.UUID;
 @Entity
 public class Video {
     @Id
-    private UUID id;
+    private String id;
+    @OneToMany
+    private List<Review> reviewList = new ArrayList<>();
+    @ManyToMany(mappedBy = "videoList")
+    private List<Category> categoryList = new ArrayList<>();
     private String title;
     private String url;
     private String description;
     @ElementCollection
     private List<String> tags = new ArrayList<>();
     private LocalDateTime publishedAt;
-    @OneToMany
-    private List<Review> reviewList = new ArrayList<>();
-    private String channelID;
+     private String channelID;
     private String channelName;
     private Long dislikeCount;
     private Long likeCount;

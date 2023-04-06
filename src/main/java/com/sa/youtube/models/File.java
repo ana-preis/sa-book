@@ -6,5 +6,5 @@ import java.io.FileInputStream;
 
 @Embeddable
 public class File {
-    private FileInputStream fileName;
+    private String fileName;
 }

@@ -19,7 +19,8 @@ public class Review extends Message{
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     private Float rating;
-    private UUID videoID;
+    @ManyToOne
+    private Video video;
     private Boolean validateRating(Float rating) {
         return rating >=0 && rating <= 10;
     }

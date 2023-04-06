@@ -9,14 +9,18 @@ import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.model.PlaylistListResponse;
 import com.google.api.services.youtube.model.VideoListResponse;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 import java.util.List;
 
+@Service
 public class YoutubeClient {
-    private static final String DEVELOPER_KEY = "AIzaSyDPNirVz5mmApgNaLnTRWUrYm_t0vWSqOs";
+    @Value("${youtube.api.security.token.secret}")
+    private static String DEVELOPER_KEY;
 
     private static final String APPLICATION_NAME = "sa-comunitube";
     private static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
@@ -34,14 +38,8 @@ public class YoutubeClient {
                 .build();
     }
 
-    /**
-     * Call function to create API service object. Define and
-     * execute API request. Print API response.
-     *
-     * @throws GeneralSecurityException, IOException, GoogleJsonResponseException
-     */
-    public static void main(String[] args)
-            throws GeneralSecurityException, IOException, GoogleJsonResponseException {
+    public void getVideoList() throws GeneralSecurityException, IOException, GoogleJsonResponseException {
+        System.out.println(DEVELOPER_KEY);
         YouTube youtubeService = getService();
         // Define and execute the API request
         YouTube.Videos.List request = youtubeService.videos()
@@ -49,4 +47,12 @@ public class YoutubeClient {
         VideoListResponse response = request.setKey(DEVELOPER_KEY).setId(Arrays.asList("6EI1K4qP8YI")).execute();
         System.out.println(response);
     }
+
+    /**
+     * Call function to create API service object. Define and
+     * execute API request. Print API response.
+     *
+     * @throws GeneralSecurityException, IOException, GoogleJsonResponseException
+     */
+
 }

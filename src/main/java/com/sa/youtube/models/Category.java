@@ -21,7 +21,7 @@ public class Category {
     private String description;
     @OneToMany(cascade = CascadeType.ALL)
     private List<User> userList = new ArrayList<>();
-    @OneToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<Video> videoList = new ArrayList<>();
     @OneToMany(cascade = CascadeType.ALL)
     private List<ForumMessage> forumMessages = new ArrayList<>();

@@ -15,6 +15,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Data
 @Entity
+@Table(name="user_")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -25,9 +26,9 @@ public class User {
     @Email
     private String email;
     private String password;
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany
     private List<Video> toWatchList = new ArrayList<>();
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany
     private List<Video> finishedList = new ArrayList<>();
     @Embedded
     private File profilePicture;
