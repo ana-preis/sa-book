@@ -19,11 +19,11 @@ public class Category {
     private UUID id;
     private String name;
     private String description;
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany
     private List<User> userList = new ArrayList<>();
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     private List<Video> videoList = new ArrayList<>();
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany
     private List<ForumMessage> forumMessages = new ArrayList<>();
     private Long viewCount;
 }

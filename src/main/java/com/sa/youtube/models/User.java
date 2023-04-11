@@ -2,6 +2,7 @@ package com.sa.youtube.models;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,14 +23,18 @@ public class User {
     private UUID id;
     @NotNull(message = "Name can't be null")
     private String name;
-    private String phone;
     @Email
     private String email;
     private String password;
-    @OneToMany
+    @ManyToMany
     private List<Video> toWatchList = new ArrayList<>();
-    @OneToMany
+    @ManyToMany
     private List<Video> finishedList = new ArrayList<>();
+    @OneToMany(mappedBy = "user")
+    private List<Message> messageList = new ArrayList<>();
     @Embedded
     private File profilePicture;
+
+
+
 }

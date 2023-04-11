@@ -32,4 +32,10 @@ public class Video {
     private Long dislikeCount;
     private Long likeCount;
     private Long viewCount;
+    @ManyToMany(mappedBy = "toWatchList")
+    private List<User> userToWatch;
+    @ManyToMany(mappedBy = "finishedList")
+    private List<User> userFinishedList;
+    @ManyToMany(mappedBy = "videoList")
+    private List<Playlist> playlist;
 }

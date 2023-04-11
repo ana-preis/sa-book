@@ -8,7 +8,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface PlaylistRepository extends JpaRepository<Playlist, Integer> {
+public interface PlaylistRepository extends JpaRepository<Playlist, String> {
     Optional<Playlist> findByTitle(String title);
-    Optional<Playlist> findById(UUID id);
+    Optional<Playlist> findById(String id);
 }

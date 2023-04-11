@@ -16,9 +16,8 @@ import java.util.UUID;
 @Entity
 public class Playlist {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
-    @OneToMany(cascade = CascadeType.ALL)
+    private String id;
+    @ManyToMany
     private List<Video> videoList = new ArrayList<>();
     private LocalDateTime publishedAt;
     private String channelID;
