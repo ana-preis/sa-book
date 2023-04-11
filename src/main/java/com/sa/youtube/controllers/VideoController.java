@@ -16,7 +16,7 @@ import java.util.List;
 // id exemplo "6EI1K4qP8YI"
 
 @RestController
-@RequestMapping("/video")
+@RequestMapping("/videos")
 public class VideoController {
 
     @Autowired
