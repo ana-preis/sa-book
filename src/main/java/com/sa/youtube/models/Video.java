@@ -8,7 +8,6 @@ import lombok.Data;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,7 +16,7 @@ import java.util.UUID;
 public class Video {
     @Id
     private String id;
-    @OneToMany
+    @OneToMany(mappedBy = "video")
     private List<Review> reviewList = new ArrayList<>();
     @ManyToMany(mappedBy = "videoList")
     private List<Category> categoryList = new ArrayList<>();

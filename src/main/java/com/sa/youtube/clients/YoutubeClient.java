@@ -7,7 +7,7 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
 
 import com.google.api.services.youtube.YouTube;
-import com.google.api.services.youtube.model.PlaylistListResponse;
+import com.google.api.services.youtube.model.SearchListResponse;
 import com.google.api.services.youtube.model.VideoListResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -19,9 +19,9 @@ import java.util.List;
 
 @Service
 public class YoutubeClient {
-    @Value("${youtube.api.security.token.secret}")
-    private static String DEVELOPER_KEY;
 
+    @Value("${youtube.api.security.token.secret}")
+    private String DEVELOPER_KEY;
     private static final String APPLICATION_NAME = "sa-comunitube";
     private static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
 
@@ -38,14 +38,26 @@ public class YoutubeClient {
                 .build();
     }
 
-    public void getVideoList() throws GeneralSecurityException, IOException, GoogleJsonResponseException {
-        System.out.println(DEVELOPER_KEY);
+    public VideoListResponse getVideo(String id) throws GeneralSecurityException, IOException, GoogleJsonResponseException {
         YouTube youtubeService = getService();
         // Define and execute the API request
         YouTube.Videos.List request = youtubeService.videos()
                 .list(Arrays.asList("snippet"));
-        VideoListResponse response = request.setKey(DEVELOPER_KEY).setId(Arrays.asList("6EI1K4qP8YI")).execute();
-        System.out.println(response);
+        VideoListResponse response = request.setId(Arrays.asList(id))
+            .setKey(DEVELOPER_KEY)
+            .execute();
+        return response;
+    }
+
+    public SearchListResponse getSearchList(String keyword, String type) throws GeneralSecurityException, IOException, GoogleJsonResponseException {
+        YouTube youtubeService = getService();
+        // Define and execute the API request
+        YouTube.Search.List request = youtubeService.search()
+            .list(Arrays.asList("snippet"));
+        SearchListResponse response = request.setMaxResults(25L).setQ(keyword).setType(Arrays.asList(type))
+            .setKey(DEVELOPER_KEY)
+            .execute();
+        return response;
     }
 
     /**
