@@ -1,4 +1,4 @@
-package com.sa.youtube.controllers.dtos;
+package com.sa.youtube.dtos;
 
 import java.util.UUID;
 

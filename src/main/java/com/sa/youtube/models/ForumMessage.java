@@ -13,9 +13,10 @@ import java.util.UUID;
 @NoArgsConstructor
 @Data
 @Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class ForumMessage extends Message{
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private Category category;
 }
