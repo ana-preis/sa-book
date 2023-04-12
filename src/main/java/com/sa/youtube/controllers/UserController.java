@@ -58,4 +58,11 @@ public class UserController {
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
+    @DeleteMapping("/{userID}")
+    public ResponseEntity<?> delete(@PathVariable UUID userID) {
+        Optional<User> optUser = repository.findById(userID);
+        repository.delete(optUser.get());
+        return new ResponseEntity<>(null, HttpStatus.OK);
+    }
+
 }
