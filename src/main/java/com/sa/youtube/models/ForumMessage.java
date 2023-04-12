@@ -15,8 +15,5 @@ import java.util.UUID;
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class ForumMessage extends Message{
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
-    @ManyToOne
-    private Category category;
+
 }

@@ -15,9 +15,6 @@ import java.util.UUID;
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class Review extends Message{
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
     private Float rating;
     @ManyToOne
     private Video video;

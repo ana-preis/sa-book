@@ -23,7 +23,4 @@ public class Category {
     private List<User> userList = new ArrayList<>();
     @ManyToMany
     private List<Video> videoList = new ArrayList<>();
-    @OneToMany
-    private List<ForumMessage> forumMessages = new ArrayList<>();
-    private Long viewCount;
 }
