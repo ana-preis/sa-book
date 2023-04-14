@@ -3,6 +3,8 @@ package com.sa.youtube.models;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
+import com.sa.youtube.dtos.UserForm;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -35,6 +37,12 @@ public class User {
     @Embedded
     private File profilePicture;
 
+    public User(UserForm dto) {
+        this.name = dto.name();
+        this.email = dto.email();
+        this.password = dto.password();
+        //this.profilePicture = dto.profilePicture();
+    }
 
 
 }

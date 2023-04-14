@@ -7,6 +7,8 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
 
 import com.google.api.services.youtube.YouTube;
+import com.google.api.services.youtube.model.PlaylistItemListResponse;
+import com.google.api.services.youtube.model.PlaylistListResponse;
 import com.google.api.services.youtube.model.SearchListResponse;
 import com.google.api.services.youtube.model.VideoListResponse;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,7 +17,6 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
-import java.util.List;
 
 @Service
 public class YoutubeClient {
@@ -44,6 +45,26 @@ public class YoutubeClient {
         YouTube.Videos.List request = youtubeService.videos()
                 .list(Arrays.asList("snippet"));
         VideoListResponse response = request.setId(Arrays.asList(id))
+            .setKey(DEVELOPER_KEY)
+            .execute();
+        return response;
+    }
+
+    public PlaylistListResponse getPlaylist(String id) throws GeneralSecurityException, IOException, GoogleJsonResponseException {
+        YouTube youtubeService = getService();
+        YouTube.Playlists.List request = youtubeService.playlists()
+            .list(Arrays.asList("snippet"));
+        PlaylistListResponse response = request.setId(Arrays.asList(id))
+            .setKey(DEVELOPER_KEY)
+            .execute();
+        return response;
+    }
+
+    public PlaylistItemListResponse getPlaylistItems(String id) throws GeneralSecurityException, IOException, GoogleJsonResponseException {
+        YouTube youtubeService = getService();
+        YouTube.PlaylistItems.List request = youtubeService.playlistItems()
+            .list(Arrays.asList("snippet"));
+        PlaylistItemListResponse response = request.setPlaylistId(id)
             .setKey(DEVELOPER_KEY)
             .execute();
         return response;

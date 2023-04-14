@@ -23,4 +23,8 @@ public class Category {
     private List<User> userList = new ArrayList<>();
     @ManyToMany
     private List<Video> videoList = new ArrayList<>();
+
+    public Long getViewCount() {
+        return 0L;
+    }
 }

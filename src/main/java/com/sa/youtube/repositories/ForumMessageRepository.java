@@ -9,6 +9,6 @@ import java.util.UUID;
 
 @Repository
 public interface ForumMessageRepository extends JpaRepository<ForumMessage, UUID> {
-    Optional<ForumMessage> findByCategory_Id(UUID categoryId);
-    Optional<ForumMessage> findById(UUID id);
+    //Optional<ForumMessage> findByCategory_Id(UUID categoryId);
+    //Optional<ForumMessage> findById(UUID id);
 }

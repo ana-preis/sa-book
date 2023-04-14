@@ -4,6 +4,8 @@ import com.sa.youtube.dtos.UserDTO;
 import com.sa.youtube.dtos.UserForm;
 import com.sa.youtube.models.User;
 import com.sa.youtube.repositories.UserRepository;
+import com.sa.youtube.services.UserService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -20,16 +22,14 @@ import java.util.UUID;
 public class UserController {
 
     @Autowired
+    private UserService service;
+    @Autowired
     private UserRepository repository;
 
     @PostMapping
-    public ResponseEntity<User> save(@RequestBody @Valid UserForm userForm) {
-        User newUser = new User();
-        newUser.setName(userForm.name());
-        newUser.setEmail(userForm.email());
-        newUser.setPassword(userForm.password());
-        User saved =  repository.save(newUser);
-        return new ResponseEntity<>(saved, HttpStatus.CREATED);
+    public ResponseEntity<UserDTO> save(@RequestBody @Valid UserForm userForm) {
+        UserDTO newUser = service.createUser(userForm);
+        return new ResponseEntity<UserDTO>(newUser, HttpStatus.CREATED);
     }
 
     @PutMapping("/{userID}")

@@ -1,11 +1,9 @@
 package com.sa.youtube.dtos;
 
 import com.sa.youtube.models.Category;
-import com.sa.youtube.models.Video;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 public record CategoryDTO(
         UUID id,

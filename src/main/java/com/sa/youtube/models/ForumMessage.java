@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 import java.util.UUID;
 
 @EqualsAndHashCode(callSuper = true)
-@AllArgsConstructor
-@NoArgsConstructor
+//@AllArgsConstructor
+//@NoArgsConstructor
 @Data
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
