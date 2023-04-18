@@ -13,7 +13,6 @@ import java.util.UUID;
 @NoArgsConstructor
 @Data
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class Review extends Message{
     private Float rating;
     @ManyToOne

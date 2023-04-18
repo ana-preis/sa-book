@@ -43,7 +43,7 @@ public class YoutubeClient {
         YouTube youtubeService = getService();
         // Define and execute the API request
         YouTube.Videos.List request = youtubeService.videos()
-                .list(Arrays.asList("snippet"));
+                .list(Arrays.asList("snippet", "statistics", "player"));
         VideoListResponse response = request.setId(Arrays.asList(id))
             .setKey(DEVELOPER_KEY)
             .execute();

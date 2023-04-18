@@ -11,6 +11,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Data
 @Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
