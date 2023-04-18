@@ -25,7 +25,7 @@ public class CategoryController {
             CategoryDTO categoryDTO = service.getById(categoryID);
             return new ResponseEntity<>(categoryDTO, HttpStatus.OK);
         } catch (Exception e) {
-            return ResponseEntity.notFound().build();
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 

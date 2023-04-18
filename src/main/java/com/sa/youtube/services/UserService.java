@@ -4,6 +4,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.sa.youtube.dtos.UserDTO;
@@ -15,7 +17,7 @@ import com.sa.youtube.repositories.UserRepository;
 public class UserService {
     
     @Autowired
-    UserRepository repository;
+    private UserRepository repository;
 
     public UserDTO createUser(UserForm userForm) {
         User saved = repository.save(new User(userForm));
@@ -28,5 +30,23 @@ public class UserService {
             return new UserDTO(userOpt.get());
         }
         throw new Exception();
+    }
+
+    public Page<UserDTO> getUsers(Pageable page) {
+        Page<UserDTO> users = repository.findAll(page).map(UserDTO::new);
+        return users;
+    }
+
+    public UserDTO updateUser(UserForm userForm, UUID id) throws Exception {
+        if (repository.findById(id).isPresent()) {
+            User updatedUser = new User(userForm);
+            updatedUser.setId(id);
+            return new UserDTO(repository.save(updatedUser));
+        }
+        throw new Exception();
+    }
+
+    public void deleteUser(UUID id) {
+        repository.deleteById(id);
     }
 }

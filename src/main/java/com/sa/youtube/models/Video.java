@@ -9,6 +9,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.sa.youtube.dtos.VideoDTO;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -21,14 +23,12 @@ public class Video {
     @ManyToMany(mappedBy = "videoList")
     private List<Category> categoryList = new ArrayList<>();
     private String title;
-    private String url;
+    private String embedHtml;
     private String description;
     @ElementCollection
     private List<String> tags = new ArrayList<>();
     private LocalDateTime publishedAt;
-     private String channelID;
     private String channelName;
-    private Long dislikeCount;
     private Long likeCount;
     private Long viewCount;
     @ManyToMany(mappedBy = "toWatchList")
@@ -37,4 +37,16 @@ public class Video {
     private List<User> userFinishedList;
     @ManyToMany(mappedBy = "videoList")
     private List<Playlist> playlist;
+
+    public Video(VideoDTO dto) {
+        id = dto.id();
+        title = dto.title();
+        embedHtml = dto.embedHtml();
+        description = dto.description();
+        tags = dto.tags();
+        publishedAt = dto.publishedAt();
+        channelName = dto.channelName();
+        likeCount = dto.likeCount();
+        viewCount = dto.viewCount();
+    }
 }

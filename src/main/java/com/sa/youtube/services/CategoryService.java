@@ -17,7 +17,7 @@ import com.sa.youtube.repositories.CategoryRepository;
 public class CategoryService {
 
     @Autowired
-    CategoryRepository repository;
+    private CategoryRepository repository;
 
     public CategoryDTO getById(UUID id) throws Exception {
         Optional<Category> categoryOpt = repository.findById(id);
