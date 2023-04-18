@@ -2,6 +2,7 @@ package com.sa.youtube.services;
 
 import java.util.Optional;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,8 +24,10 @@ public class VideoService {
         throw new Exception();
     }
 
-    public VideoDTO createVideo(VideoDTO dto) {
-        Video newVideo = new Video(dto);
-        return new VideoDTO(newVideo);
+    @Transactional
+    public Video createVideo(VideoDTO dto) {
+        Video video = new Video(dto);
+        Video newVideo = repository.save(video);
+        return newVideo;
     }
 }

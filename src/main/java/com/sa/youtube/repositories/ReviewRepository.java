@@ -10,9 +10,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@Repository
 public interface ReviewRepository extends JpaRepository<Review, UUID> {
-    Optional<Review> findById(UUID id);
-
-    List<Review> findByVideo_Id(String id);
+    List<Review> findByVideo_Id(String videoId);
 }

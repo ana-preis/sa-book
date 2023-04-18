@@ -1,21 +1,20 @@
 package com.sa.youtube.services;
 
-import com.google.api.services.youtube.model.VideoListResponse;
 import com.sa.youtube.clients.YoutubeClient;
 import com.sa.youtube.dtos.ReviewDTO;
 import com.sa.youtube.dtos.ReviewVideoForm;
+import com.sa.youtube.dtos.VideoDTO;
+import com.sa.youtube.models.Message;
 import com.sa.youtube.models.Review;
 import com.sa.youtube.models.User;
 import com.sa.youtube.models.Video;
 import com.sa.youtube.repositories.ReviewRepository;
 import com.sa.youtube.repositories.UserRepository;
 import com.sa.youtube.repositories.VideoRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.security.GeneralSecurityException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -33,38 +32,21 @@ public class ReviewService {
     private YoutubeClient youtubeClient;
 
     @Autowired
-    private VideoRepository videoRepository;
+    private VideoService videoService;
 
-    public Review save(ReviewVideoForm form) throws GeneralSecurityException, IOException {
-        Video video = new Video();
-        video.setId(form.video().id());
-        video.setUrl(form.video().url());
-        video.setChannelID(form.video().channelID());
-        video.setTitle(form.video().title());
-        Video newVideo = videoRepository.save(video);
-        Review review = new Review();
+    @Transactional
+    public ReviewDTO save(ReviewVideoForm form) {
+        Video newVideo = videoService.createVideo(form.video());
         Optional<User> userOpt = userRepository.findById(form.review().userID());
-        System.out.println(userOpt.get());
+        System.out.println(userOpt.get().getName());
 
         if(userOpt.isPresent()) {
-            review.setVideo(newVideo);
-            review.setRating(form.review().rating());
-            review.setUser(userOpt.get());
-            System.out.println(review);
+            Review review = new Review(form.review(), userOpt.get(), newVideo);
             Review newReview = repository.save(review);
-            return newReview;
+            return new ReviewDTO(newReview) ;
         }
-        return review;
-    }
-
-    public List<Review> getByVideoId(String id) {
-        System.out.println(id);
-        List<Review> reviewsOpt = repository.findByVideo_Id(id);
-        System.out.println("REVIEWS OPTIONAL: " + reviewsOpt);
-//        if (reviewsOpt.isPresent()) {
-//            return reviewsOpt.get();
-//        }
-        return reviewsOpt;
+        Review emptyReview = new Review();
+        return new ReviewDTO(emptyReview);
     }
 
     public Review getById(UUID id) {
@@ -74,4 +56,15 @@ public class ReviewService {
         }
         return new Review();
     }
+
+    public List<Review> search(String videoId) {
+        List<Review> reviews;
+        if (videoId.equals("")){
+            reviews = repository.findAll();
+        } else {
+            reviews = repository.findByVideo_Id(videoId);
+        }
+        return reviews;
+    }
+
 }

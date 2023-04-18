@@ -4,6 +4,7 @@ import com.google.api.services.youtube.model.VideoListResponse;
 import com.sa.youtube.clients.YoutubeClient;
 import com.sa.youtube.dtos.ReviewDTO;
 import com.sa.youtube.dtos.ReviewVideoForm;
+import com.sa.youtube.models.Message;
 import com.sa.youtube.models.Review;
 import com.sa.youtube.models.User;
 import com.sa.youtube.models.Video;
@@ -34,14 +35,14 @@ public class ReviewController {
     private ReviewService service;
 
     @PostMapping
-    public ResponseEntity<Review> save(@RequestBody ReviewVideoForm form) throws GeneralSecurityException, IOException {
-        Review newReview = service.save(form);
+    public ResponseEntity<ReviewDTO> save(@RequestBody ReviewVideoForm form) {
+        ReviewDTO newReview = service.save(form);
         return new ResponseEntity<>(newReview, HttpStatus.CREATED);
     }
 
     @GetMapping("")
-    public ResponseEntity<List<Review>> getByVideoId(@RequestParam String videoId) {
-        List<Review> reviews = service.getByVideoId(videoId);
+    public ResponseEntity<List<Review>> search(@RequestParam(defaultValue = "") String videoId) {
+        List<Review> reviews = service.search(videoId);
         return new ResponseEntity<>(reviews, HttpStatus.OK);
     }
 
