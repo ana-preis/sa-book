@@ -27,15 +27,11 @@ public class VideoController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getByID(@PathVariable String id) throws GeneralSecurityException, IOException {
-        Video video = new Video();
-        video.setId(id);
-        video.setUrl("www.url");
-        video.setTitle("Test");
         VideoListResponse response = youtubeClient.getVideo(id);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping("")
+    @GetMapping
     public ResponseEntity<List<Video>> searchVideos(@RequestParam(defaultValue = "") String text) {
         List<Video> videoList = repository.findAllByTitleContainingIgnoreCase(text);
         return new ResponseEntity<>(videoList, HttpStatus.OK);

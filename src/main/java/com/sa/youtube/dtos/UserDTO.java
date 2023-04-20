@@ -10,6 +10,14 @@ public record UserDTO(
         UUID id,
         String name,
         String email,
-        File profilePicture
-) {
+        File profilePicture) {
+
+    public UserDTO(User user) {
+        this(
+            user.getId(),
+            user.getName(),
+            user.getEmail(),
+            user.getProfilePicture()
+        );
+    }
 }
