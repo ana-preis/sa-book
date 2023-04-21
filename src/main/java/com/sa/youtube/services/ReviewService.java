@@ -1,16 +1,12 @@
 package com.sa.youtube.services;
 
-import com.sa.youtube.clients.YoutubeClient;
 import com.sa.youtube.dtos.ReviewDTO;
 import com.sa.youtube.dtos.ReviewVideoForm;
-import com.sa.youtube.dtos.VideoDTO;
-import com.sa.youtube.models.Message;
 import com.sa.youtube.models.Review;
 import com.sa.youtube.models.User;
 import com.sa.youtube.models.Video;
 import com.sa.youtube.repositories.ReviewRepository;
 import com.sa.youtube.repositories.UserRepository;
-import com.sa.youtube.repositories.VideoRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,13 +19,10 @@ import java.util.UUID;
 public class ReviewService {
 
     @Autowired
-    ReviewRepository repository;
+    private ReviewRepository repository;
 
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private YoutubeClient youtubeClient;
 
     @Autowired
     private VideoService videoService;
@@ -49,22 +42,22 @@ public class ReviewService {
         return new ReviewDTO(emptyReview);
     }
 
-    public Review getById(UUID id) {
+    public ReviewDTO getById(UUID id) throws Exception {
         Optional<Review> reviewOpt = repository.findById(id);
         if(reviewOpt.isPresent()) {
-            return reviewOpt.get();
+            return new ReviewDTO(reviewOpt.get());
         }
-        return new Review();
+        throw new Exception();
     }
 
-    public List<Review> search(String videoId) {
+    public List<ReviewDTO> search(String videoId) {
         List<Review> reviews;
         if (videoId.equals("")){
             reviews = repository.findAll();
         } else {
             reviews = repository.findByVideo_Id(videoId);
         }
-        return reviews;
+        return ReviewDTO.toReviewDTOList(reviews);
     }
 
 }
