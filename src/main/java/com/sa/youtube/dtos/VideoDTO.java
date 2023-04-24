@@ -37,6 +37,8 @@ public record VideoDTO(
     }
 
     public static List<VideoDTO> toVideoDTOList(List<Video> videoList) {
-        return videoList.stream().map(video -> new VideoDTO(video)).collect(Collectors.toList());
+        return videoList.stream()
+            .map(video -> new VideoDTO(video))
+            .collect(Collectors.toList());
     }
 }
