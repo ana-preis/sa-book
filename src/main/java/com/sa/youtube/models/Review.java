@@ -1,6 +1,7 @@
 package com.sa.youtube.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.api.client.util.DateTime;
 import com.sa.youtube.dtos.ReviewDTO;
 import com.sa.youtube.dtos.VideoDTO;
 import jakarta.persistence.*;
@@ -26,6 +27,7 @@ public class Review{
     private Float rating;
     @ManyToOne
     private Video video;
+    private DateTime publishedAt;
     private Boolean validateRating(Float rating) {
         return rating >=0 && rating <= 10;
     }
@@ -35,5 +37,6 @@ public class Review{
         this.user = user;
         this.rating = dto.rating();
         this.video = video;
+        this.publishedAt = new DateTime(dto.publishedAt());
     }
 }

@@ -1,13 +1,16 @@
 package com.sa.youtube.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.api.client.util.DateTime;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.Data;
 
+import java.sql.Time;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.sa.youtube.dtos.VideoDTO;
@@ -30,7 +33,7 @@ public class Video {
     private String description;
     @ElementCollection
     private List<String> tags = new ArrayList<>();
-    private LocalDateTime publishedAt;
+    private DateTime publishedAt;
     private String channelName;
     private Long likeCount;
     private Long viewCount;
@@ -47,7 +50,7 @@ public class Video {
         this.embedHtml = dto.embedHtml();
         this.description = dto.description();
         this.tags = dto.tags();
-        this.publishedAt = dto.publishedAt();
+        this.publishedAt = new DateTime(dto.publishedAt());
         this.channelName = dto.channelName();
         this.likeCount = dto.likeCount();
         this.viewCount = dto.viewCount();

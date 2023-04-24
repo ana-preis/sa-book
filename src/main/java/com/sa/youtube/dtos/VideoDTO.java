@@ -4,6 +4,7 @@ package com.sa.youtube.dtos;
 import com.sa.youtube.models.Review;
 import com.sa.youtube.models.Video;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,7 +15,7 @@ public record VideoDTO(
         String embedHtml,
         String description,
         List<String> tags,
-        LocalDateTime publishedAt,
+        Long publishedAt,
         List<Review> reviewList,
         String channelName,
         Long likeCount,
@@ -28,7 +29,7 @@ public record VideoDTO(
             video.getEmbedHtml(),
             video.getDescription(),
             video.getTags(),
-            video.getPublishedAt(),
+            video.getPublishedAt().getValue(),
             video.getReviewList(),
             video.getChannelName(),
             video.getLikeCount(),
