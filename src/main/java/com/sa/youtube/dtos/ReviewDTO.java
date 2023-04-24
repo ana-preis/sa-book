@@ -9,14 +9,15 @@ import java.util.stream.Collectors;
 public record ReviewDTO(
         Float rating,
         String text,
-        UUID userID
+        UUID userID,
+        Long publishedAt
     ) {
-
     public ReviewDTO(Review review) {
         this (
-            review.getRating(),
-            review.getText(),
-            review.getUser().getId()
+                review.getRating(),
+                review.getText(),
+                review.getUser().getId(),
+                review.getPublishedAt().getValue()
         );
     }
 
@@ -25,4 +26,5 @@ public record ReviewDTO(
             .map(review -> new ReviewDTO(review))
             .collect(Collectors.toList());
     }
+
 }
