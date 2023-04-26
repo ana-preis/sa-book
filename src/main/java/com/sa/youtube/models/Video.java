@@ -43,6 +43,7 @@ public class Video {
     private List<User> userFinishedList;
     @ManyToMany(mappedBy = "videoList")
     private List<Playlist> playlist;
+    private String thumbnail;
 
     public Video(VideoDTO dto) {
         this.id = dto.id();
@@ -54,5 +55,6 @@ public class Video {
         this.channelName = dto.channelName();
         this.likeCount = dto.likeCount();
         this.viewCount = dto.viewCount();
+        this.thumbnail = dto.thumbnail();
     }
 }

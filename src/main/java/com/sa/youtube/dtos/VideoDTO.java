@@ -19,7 +19,8 @@ public record VideoDTO(
         List<Review> reviewList,
         String channelName,
         Long likeCount,
-        Long viewCount
+        Long viewCount,
+        String thumbnail
     ) {
 
     public VideoDTO(Video video) {
@@ -33,7 +34,8 @@ public record VideoDTO(
             video.getReviewList(),
             video.getChannelName(),
             video.getLikeCount(),
-            video.getViewCount()
+            video.getViewCount(),
+            video.getThumbnail()
         );
     }
 

@@ -1,5 +1,6 @@
 package com.sa.youtube.services;
 
+import com.google.api.client.util.DateTime;
 import com.sa.youtube.dtos.ReviewDTO;
 import com.sa.youtube.dtos.ReviewVideoForm;
 import com.sa.youtube.models.Review;
@@ -11,6 +12,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -31,15 +33,13 @@ public class ReviewService {
     public ReviewDTO save(ReviewVideoForm form) {
         Video newVideo = videoService.createVideo(form.video());
         Optional<User> userOpt = userRepository.findById(form.review().userID());
-        System.out.println(userOpt.get().getName());
 
         if(userOpt.isPresent()) {
             Review review = new Review(form.review(), userOpt.get(), newVideo);
             Review newReview = repository.save(review);
             return new ReviewDTO(newReview) ;
         }
-        Review emptyReview = new Review();
-        return new ReviewDTO(emptyReview);
+        return null;
     }
 
     public ReviewDTO getById(UUID id) throws Exception {

@@ -10,6 +10,7 @@ public record ReviewDTO(
         Float rating,
         String text,
         UUID userID,
+        String userName,
         Long publishedAt
     ) {
     public ReviewDTO(Review review) {
@@ -17,6 +18,7 @@ public record ReviewDTO(
                 review.getRating(),
                 review.getText(),
                 review.getUser().getId(),
+                review.getUser().getName(),
                 review.getPublishedAt().getValue()
         );
     }
