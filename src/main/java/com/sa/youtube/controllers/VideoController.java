@@ -2,12 +2,9 @@ package com.sa.youtube.controllers;
 
 import com.google.api.services.youtube.model.VideoListResponse;
 import com.sa.youtube.clients.YoutubeClient;
-import com.sa.youtube.dtos.ReviewDTO;
-import com.sa.youtube.dtos.VideoDTO;
 import com.sa.youtube.dtos.VideoDetailsDTO;
 import com.sa.youtube.models.Video;
 import com.sa.youtube.repositories.VideoRepository;
-import com.sa.youtube.services.ReviewService;
 import com.sa.youtube.services.VideoService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,15 +31,10 @@ public class VideoController {
     @Autowired
     private VideoService service;
 
-    @Autowired
-    private ReviewService reviewService;
-
     @GetMapping("/{id}")
     public ResponseEntity<?> getByID(@PathVariable String id) throws GeneralSecurityException, IOException {
         try {
-            VideoDTO video = service.getVideoById(id);
-            List<ReviewDTO> reviews = reviewService.search(id);
-            VideoDetailsDTO response = new VideoDetailsDTO(video, reviews);
+            VideoDetailsDTO response = service.getVideoDetails(id);
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
             VideoListResponse response = youtubeClient.getVideo(id);

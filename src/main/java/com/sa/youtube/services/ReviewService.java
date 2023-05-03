@@ -31,7 +31,7 @@ public class ReviewService {
     public ReviewDTO save(ReviewVideoForm form) {
         Video newVideo = videoService.createVideo(form.video());
         Optional<User> userOpt = userRepository.findById(form.review().userID());
-        System.out.println(userOpt.get().getName());
+        System.out.println(userOpt.get().getUsername());
 
         if(userOpt.isPresent()) {
             Review review = new Review(form.review(), userOpt.get(), newVideo);
