@@ -53,7 +53,7 @@ public class YoutubeClient {
     public PlaylistListResponse getPlaylist(String id) throws GeneralSecurityException, IOException, GoogleJsonResponseException {
         YouTube youtubeService = getService();
         YouTube.Playlists.List request = youtubeService.playlists()
-            .list(Arrays.asList("snippet"));
+            .list(Arrays.asList("snippet", "contentDetails"));
         PlaylistListResponse response = request.setId(Arrays.asList(id))
             .setKey(DEVELOPER_KEY)
             .execute();
@@ -63,7 +63,7 @@ public class YoutubeClient {
     public PlaylistItemListResponse getPlaylistItems(String id) throws GeneralSecurityException, IOException, GoogleJsonResponseException {
         YouTube youtubeService = getService();
         YouTube.PlaylistItems.List request = youtubeService.playlistItems()
-            .list(Arrays.asList("snippet"));
+            .list(Arrays.asList("snippet", "contentDetails"));
         PlaylistItemListResponse response = request.setPlaylistId(id)
             .setKey(DEVELOPER_KEY)
             .execute();

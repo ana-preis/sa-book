@@ -24,7 +24,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     @NotNull(message = "Name can't be null")
-    private String name;
+    private String username;
     @Email
     private String email;
     private String password;
@@ -34,14 +34,16 @@ public class User {
     private List<Video> finishedList = new ArrayList<>();
     @OneToMany(mappedBy = "user")
     private List<Message> messageList = new ArrayList<>();
+
+    /*
     @Embedded
     private File profilePicture;
+    */
 
     public User(UserForm dto) {
-        this.name = dto.name();
+        this.username = dto.username();
         this.email = dto.email();
         this.password = dto.password();
-        //this.profilePicture = dto.profilePicture();
     }
 
 

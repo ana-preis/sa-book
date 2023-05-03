@@ -44,11 +44,11 @@ public class UserController {
         return new ResponseEntity<UserDTO>(newUser, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{userID}")
+    @PatchMapping("/{userID}")
     public ResponseEntity<UserDTO> update(@RequestBody @Valid UserForm userForm, @PathVariable UUID userID) {
         try {
             UserDTO userDTO = service.updateUser(userForm, userID);
-            return new ResponseEntity<>(userDTO, HttpStatus.CREATED);
+            return new ResponseEntity<>(userDTO, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -57,7 +57,7 @@ public class UserController {
     @DeleteMapping("/{userID}")
     public ResponseEntity<?> delete(@PathVariable UUID userID) {
         service.deleteUser(userID);
-        return new ResponseEntity<>(null, HttpStatus.OK);
+        return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
     }
 
 }

@@ -13,12 +13,15 @@ import com.sa.youtube.dtos.UserForm;
 import com.sa.youtube.models.User;
 import com.sa.youtube.repositories.UserRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class UserService {
     
     @Autowired
     private UserRepository repository;
 
+    @Transactional
     public UserDTO createUser(UserForm userForm) {
         User saved = repository.save(new User(userForm));
         return new UserDTO(saved);
@@ -37,15 +40,26 @@ public class UserService {
         return users;
     }
 
+    @Transactional
     public UserDTO updateUser(UserForm userForm, UUID id) throws Exception {
-        if (repository.findById(id).isPresent()) {
-            User updatedUser = new User(userForm);
-            updatedUser.setId(id);
-            return new UserDTO(repository.save(updatedUser));
+        Optional<User> userOpt = repository.findById(id);
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+            if (userForm.email() != null) {
+                user.setEmail(userForm.email());
+            }
+            if (userForm.username() != null) {
+                user.setUsername(userForm.username());
+            }
+            if (userForm.password() != null) {
+                user.setPassword(userForm.password());
+            }
+            return new UserDTO(repository.save(user));
         }
         throw new Exception();
     }
 
+    @Transactional
     public void deleteUser(UUID id) {
         repository.deleteById(id);
     }

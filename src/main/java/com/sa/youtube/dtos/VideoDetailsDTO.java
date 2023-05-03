@@ -4,5 +4,7 @@ import java.util.List;
 
 public record VideoDetailsDTO(
         VideoDTO videoDTO,
-        List<ReviewDTO> reviewDTOs) {
+        List<ReviewDTO> reviewDTOList,
+        Double averageRating,
+        Integer totalReviews) {
 }
