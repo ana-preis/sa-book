@@ -32,6 +32,7 @@ public class User {
     @Email
     private String email;
 
+    @Column(name = "password_")
     private String password;
 
     @OneToMany(mappedBy = "user")
