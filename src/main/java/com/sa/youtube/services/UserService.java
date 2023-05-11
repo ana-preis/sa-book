@@ -1,6 +1,5 @@
 package com.sa.youtube.services;
 
-import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,12 +26,9 @@ public class UserService {
         return new UserDTO(saved);
     }
 
-    public UserDTO getUserById(UUID id) throws Exception {
-        Optional<User> userOpt = repository.findById(id);
-        if (userOpt.isPresent()) {
-            return new UserDTO(userOpt.get());
-        }
-        throw new Exception();
+    public UserDTO getUserById(UUID id) {
+        User user = repository.findById(id).orElseThrow();
+        return new UserDTO(user);
     }
 
     public Page<UserDTO> getUsers(Pageable page) {
@@ -41,22 +37,18 @@ public class UserService {
     }
 
     @Transactional
-    public UserDTO updateUser(UserForm userForm, UUID id) throws Exception {
-        Optional<User> userOpt = repository.findById(id);
-        if (userOpt.isPresent()) {
-            User user = userOpt.get();
-            if (userForm.email() != null) {
-                user.setEmail(userForm.email());
-            }
-            if (userForm.username() != null) {
-                user.setUsername(userForm.username());
-            }
-            if (userForm.password() != null) {
-                user.setPassword(userForm.password());
-            }
-            return new UserDTO(repository.save(user));
+    public UserDTO updateUser(UserForm userForm, UUID id) {
+        User user = repository.findById(id).orElseThrow();
+        if (userForm.email() != null) {
+            user.setEmail(userForm.email());
         }
-        throw new Exception();
+        if (userForm.username() != null) {
+            user.setUsername(userForm.username());
+        }
+        if (userForm.password() != null) {
+            user.setPassword(userForm.password());
+        }
+        return new UserDTO(repository.save(user));
     }
 
     @Transactional

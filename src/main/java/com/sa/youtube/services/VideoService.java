@@ -2,7 +2,6 @@ package com.sa.youtube.services;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,12 +24,9 @@ public class VideoService {
     @Autowired
     private ReviewRepository reviewRepository;
 
-    public VideoDTO getVideoById(String id) throws Exception {
-        Optional<Video> videoOpt = repository.findById(id);
-        if (videoOpt.isPresent()) {
-            return new VideoDTO(videoOpt.get());
-        }
-        throw new Exception();
+    public VideoDTO getVideoById(String id) {
+        Video video = repository.findById(id).orElseThrow();
+        return new VideoDTO(video);
     }
 
     @Transactional
@@ -40,7 +36,7 @@ public class VideoService {
         return newVideo;
     }
 
-    public VideoDetailsDTO getVideoDetails(String videoID) throws Exception {
+    public VideoDetailsDTO getVideoDetails(String videoID) {
         try {
             VideoDTO videoDTO = getVideoById(videoID);
             List<Review> reviews = reviewRepository.findByVideo_Id(videoID);

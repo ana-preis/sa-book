@@ -4,8 +4,6 @@ package com.sa.youtube.dtos;
 import com.sa.youtube.models.Review;
 import com.sa.youtube.models.Video;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 

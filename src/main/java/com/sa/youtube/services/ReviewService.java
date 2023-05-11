@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -29,25 +28,15 @@ public class ReviewService {
 
     @Transactional
     public ReviewDTO save(ReviewVideoForm form) {
+        User user = userRepository.findById(form.review().userID()).orElseThrow();
         Video newVideo = videoService.createVideo(form.video());
-        Optional<User> userOpt = userRepository.findById(form.review().userID());
-        System.out.println(userOpt.get().getUsername());
-
-        if(userOpt.isPresent()) {
-            Review review = new Review(form.review(), userOpt.get(), newVideo);
-            Review newReview = repository.save(review);
-            return new ReviewDTO(newReview) ;
-        }
-        Review emptyReview = new Review();
-        return new ReviewDTO(emptyReview);
+        Review newReview = new Review(form.review(), user, newVideo);
+        return new ReviewDTO(repository.save(newReview));
     }
 
-    public ReviewDTO getById(UUID id) throws Exception {
-        Optional<Review> reviewOpt = repository.findById(id);
-        if(reviewOpt.isPresent()) {
-            return new ReviewDTO(reviewOpt.get());
-        }
-        throw new Exception();
+    public ReviewDTO getById(UUID id) {
+        Review review = repository.findById(id).orElseThrow();
+        return new ReviewDTO(review);
     }
 
     public List<ReviewDTO> search(String videoId) {

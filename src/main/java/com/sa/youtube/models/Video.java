@@ -1,6 +1,5 @@
 package com.sa.youtube.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.api.client.util.DateTime;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -12,34 +11,48 @@ import java.util.List;
 
 import com.sa.youtube.dtos.VideoDTO;
 
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Entity
 public class Video {
+
     @Id
     private String id;
-    @OneToMany(mappedBy = "video", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonIgnore
-    private List<Review> reviewList = new ArrayList<>();
-    @ManyToMany(mappedBy = "videoList")
-    private List<Category> categoryList = new ArrayList<>();
+    
     private String title;
+    
     private String embedHtml;
+    
     @Column(length = 1028)
     private String description;
+    
     @ElementCollection
     private List<String> tags = new ArrayList<>();
+    
     private DateTime publishedAt;
+    
     private String channelName;
+    
     private Long likeCount;
+    
     private Long viewCount;
-    @ManyToMany(mappedBy = "toWatchList")
-    private List<User> userToWatch;
-    @ManyToMany(mappedBy = "finishedList")
-    private List<User> userFinishedList;
+
+    private Double averageRating;
+
+    @OneToMany(mappedBy = "video")
+    private List<Review> reviewList = new ArrayList<>();
+
     @ManyToMany(mappedBy = "videoList")
-    private List<Playlist> playlist;
+    private List<Category> categoryList = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "toWatchList")
+    private List<User> userToWatch = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "finishedList")
+    private List<User> userFinishedList = new ArrayList<>();
+
 
     public Video(VideoDTO dto) {
         this.id = dto.id();
@@ -52,4 +65,5 @@ public class Video {
         this.likeCount = dto.likeCount();
         this.viewCount = dto.viewCount();
     }
+
 }

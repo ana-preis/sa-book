@@ -8,16 +8,20 @@ import java.util.UUID;
 public record CategoryDTO(
         UUID id,
         String name,
-        Long viewCount,
         String description,
+        Integer userCount,
+        Integer videoCount,
+        Long viewCount,
         List<VideoDTO> videoDTOList) {
 
     public CategoryDTO(Category category, List<VideoDTO> videoList) {
         this (
                 category.getId(),
                 category.getName(),
-                category.getViewCount(),
                 category.getDescription(),
+                category.getUserList().size(),
+                category.getVideoList().size(),
+                category.getViewCount(),
                 videoList
         );
     }

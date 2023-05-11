@@ -9,22 +9,29 @@ import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
-//@EqualsAndHashCode(callSuper = true)
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Entity
 public class Review{
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
     private String text;
+
     @ManyToOne
     private User user;
+
     private Integer rating;
+
     @ManyToOne
     private Video video;
+
     private DateTime publishedAt;
+
 
     public Review(ReviewDTO dto, User user, Video video) {
         this.text = dto.text();
@@ -33,4 +40,5 @@ public class Review{
         this.video = video;
         this.publishedAt = new DateTime(dto.publishedAt());
     }
+
 }

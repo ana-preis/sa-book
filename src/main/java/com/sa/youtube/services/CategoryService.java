@@ -22,15 +22,10 @@ public class CategoryService {
     @Autowired
     private CategoryRepository repository;
 
-    public CategoryDTO getById(UUID id) throws Exception {
-        Optional<Category> categoryOpt = repository.findById(id);
-        if (categoryOpt.isPresent()) {
-            Category newCategory = categoryOpt.get();
-            List<VideoDTO> videoDTOList = VideoDTO.toVideoDTOList(newCategory.getVideoList());
-            CategoryDTO categoryDTO = new CategoryDTO(newCategory, videoDTOList);
-            return categoryDTO;
-        }
-        throw new Exception();
+    public CategoryDTO getById(UUID id) {
+        Category category = repository.findById(id).orElseThrow();
+        List<VideoDTO> videoDTOList = VideoDTO.toVideoDTOList(category.getVideoList());
+        return new CategoryDTO(category, videoDTOList);
     }
 
     public List<Category> getByName(String text) {
