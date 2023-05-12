@@ -47,6 +47,7 @@ public class YoutubeClient {
         VideoListResponse response = request.setId(Arrays.asList(id))
             .setKey(DEVELOPER_KEY)
             .execute();
+        System.out.println(response.getItems().get(0));
         return response;
     }
 

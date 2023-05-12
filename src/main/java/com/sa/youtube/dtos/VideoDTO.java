@@ -1,7 +1,6 @@
 package com.sa.youtube.dtos;
 
 
-import com.sa.youtube.models.Review;
 import com.sa.youtube.models.Video;
 
 import java.util.List;
@@ -14,7 +13,7 @@ public record VideoDTO(
         String description,
         List<String> tags,
         Long publishedAt,
-        List<Review> reviewList,
+        List<ReviewDTO> reviewDTOList,
         String channelName,
         Long likeCount,
         Long viewCount
@@ -28,7 +27,7 @@ public record VideoDTO(
             video.getDescription(),
             video.getTags(),
             video.getPublishedAt().getValue(),
-            video.getReviewList(),
+            ReviewDTO.toReviewDTOList(video.getReviewList()),
             video.getChannelName(),
             video.getLikeCount(),
             video.getViewCount()

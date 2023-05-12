@@ -40,7 +40,6 @@ public class VideoController {
             VideoListResponse response = youtubeClient.getVideo(id);
             return new ResponseEntity<>(response, HttpStatus.OK);
         }
-        
     }
 
     @GetMapping

@@ -24,6 +24,8 @@ public class Video {
     private String title;
     
     private String embedHtml;
+
+    private String thumbnailUrl;
     
     @Column(length = 1028)
     private String description;
@@ -64,6 +66,19 @@ public class Video {
         this.channelName = dto.channelName();
         this.likeCount = dto.likeCount();
         this.viewCount = dto.viewCount();
+    }
+
+    public Video(com.google.api.services.youtube.model.Video video) {
+        this.id = video.getId();
+        this.title = video.getSnippet().getTitle();
+        this.embedHtml = video.getPlayer().getEmbedHtml();
+        this.thumbnailUrl = video.getSnippet().getThumbnails().getMedium().getUrl();
+        this.description = video.getSnippet().getDescription();
+        this.tags = video.getSnippet().getTags();
+        this.publishedAt = new DateTime(video.getSnippet().getPublishedAt().getValue());
+        this.channelName = video.getSnippet().getChannelTitle();
+        this.likeCount = video.getStatistics().getLikeCount().longValue();
+        this.viewCount = video.getStatistics().getViewCount().longValue();
     }
 
 }
