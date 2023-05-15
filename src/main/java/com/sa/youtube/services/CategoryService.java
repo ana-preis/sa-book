@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sa.youtube.dtos.CategoryDTO;
-import com.sa.youtube.dtos.VideoDTO;
+import com.sa.youtube.dtos.VideoOutDTO;
 import com.sa.youtube.models.Category;
 import com.sa.youtube.models.Video;
 import com.sa.youtube.repositories.CategoryRepository;
@@ -24,7 +24,7 @@ public class CategoryService {
 
     public CategoryDTO getById(UUID id) {
         Category category = repository.findById(id).orElseThrow();
-        List<VideoDTO> videoDTOList = VideoDTO.toVideoDTOList(category.getVideoList());
+        List<VideoOutDTO> videoDTOList = VideoOutDTO.toVideoDTOList(category.getVideoList());
         return new CategoryDTO(category, videoDTOList);
     }
 
@@ -41,7 +41,7 @@ public class CategoryService {
             videoList.add(video);
             category.setVideoList(videoList);
             Category updatedCategory = repository.save(category);
-            List<VideoDTO> videoDTOList = VideoDTO.toVideoDTOList(updatedCategory.getVideoList());
+            List<VideoOutDTO> videoDTOList = VideoOutDTO.toVideoDTOList(updatedCategory.getVideoList());
             return new CategoryDTO(updatedCategory, videoDTOList);
         }
         throw new Exception();

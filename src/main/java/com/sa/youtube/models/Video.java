@@ -6,10 +6,10 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.Data;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
-import com.sa.youtube.dtos.VideoDTO;
+import com.sa.youtube.dtos.VideoInDTO;
 
 
 @AllArgsConstructor
@@ -27,15 +27,15 @@ public class Video {
 
     private String thumbnailUrl;
     
-    @Column(length = 1028)
+    @Column(length = 5000)
     private String description;
-    
+
     @ElementCollection
-    private List<String> tags = new ArrayList<>();
+    private Set<String> tags = new HashSet<>();
     
     private DateTime publishedAt;
     
-    private String channelName;
+    private String channelTitle;
     
     private Long likeCount;
     
@@ -44,41 +44,29 @@ public class Video {
     private Double averageRating;
 
     @OneToMany(mappedBy = "video")
-    private List<Review> reviewList = new ArrayList<>();
+    private Set<Review> reviewList = new HashSet<>();
 
     @ManyToMany(mappedBy = "videoList")
-    private List<Category> categoryList = new ArrayList<>();
+    private Set<Category> categoryList = new HashSet<>();
 
     @ManyToMany(mappedBy = "toWatchList")
-    private List<User> userToWatch = new ArrayList<>();
+    private Set<User> userToWatch = new HashSet<>();
 
     @ManyToMany(mappedBy = "finishedList")
-    private List<User> userFinishedList = new ArrayList<>();
+    private Set<User> userFinishedList = new HashSet<>();
 
 
-    public Video(VideoDTO dto) {
+    public Video(VideoInDTO dto) {
         this.id = dto.id();
         this.title = dto.title();
         this.embedHtml = dto.embedHtml();
+        this.thumbnailUrl = dto.thumbnailUrl();
         this.description = dto.description();
         this.tags = dto.tags();
         this.publishedAt = new DateTime(dto.publishedAt());
-        this.channelName = dto.channelName();
+        this.channelTitle = dto.channelTitle();
         this.likeCount = dto.likeCount();
         this.viewCount = dto.viewCount();
-    }
-
-    public Video(com.google.api.services.youtube.model.Video video) {
-        this.id = video.getId();
-        this.title = video.getSnippet().getTitle();
-        this.embedHtml = video.getPlayer().getEmbedHtml();
-        this.thumbnailUrl = video.getSnippet().getThumbnails().getMedium().getUrl();
-        this.description = video.getSnippet().getDescription();
-        this.tags = video.getSnippet().getTags();
-        this.publishedAt = new DateTime(video.getSnippet().getPublishedAt().getValue());
-        this.channelName = video.getSnippet().getChannelTitle();
-        this.likeCount = video.getStatistics().getLikeCount().longValue();
-        this.viewCount = video.getStatistics().getViewCount().longValue();
     }
 
 }

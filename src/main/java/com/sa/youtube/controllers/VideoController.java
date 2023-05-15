@@ -1,8 +1,7 @@
 package com.sa.youtube.controllers;
 
-import com.google.api.services.youtube.model.VideoListResponse;
-import com.sa.youtube.clients.YoutubeClient;
-import com.sa.youtube.dtos.VideoDetailsDTO;
+import com.google.api.client.googleapis.json.GoogleJsonResponseException;
+import com.sa.youtube.dtos.VideoOutDTO;
 import com.sa.youtube.models.Video;
 import com.sa.youtube.repositories.VideoRepository;
 import com.sa.youtube.services.VideoService;
@@ -23,23 +22,22 @@ import java.util.List;
 public class VideoController {
 
     @Autowired
-    private YoutubeClient youtubeClient;
-
-    @Autowired
     private VideoRepository repository;
 
     @Autowired
     private VideoService service;
 
+    @PostMapping("/{id}")
+    public ResponseEntity<VideoOutDTO> create(@PathVariable String id)
+        throws GeneralSecurityException, IOException, GoogleJsonResponseException {
+            VideoOutDTO dto = new VideoOutDTO(service.createVideo(id));
+            return new ResponseEntity<VideoOutDTO>(dto, HttpStatus.CREATED);
+    }
+
     @GetMapping("/{id}")
-    public ResponseEntity<?> getByID(@PathVariable String id) throws GeneralSecurityException, IOException {
-        try {
-            VideoDetailsDTO response = service.getVideoDetails(id);
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        } catch (Exception e) {
-            VideoListResponse response = youtubeClient.getVideo(id);
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        }
+    public ResponseEntity<VideoOutDTO> retrieve(@PathVariable String id) throws GeneralSecurityException, IOException {
+        VideoOutDTO dto = service.getVideoById(id);
+        return new ResponseEntity<VideoOutDTO>(dto, HttpStatus.OK);
     }
 
     @GetMapping

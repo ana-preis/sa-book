@@ -11,6 +11,8 @@ import com.google.api.services.youtube.model.PlaylistItemListResponse;
 import com.google.api.services.youtube.model.PlaylistListResponse;
 import com.google.api.services.youtube.model.SearchListResponse;
 import com.google.api.services.youtube.model.VideoListResponse;
+import com.sa.youtube.dtos.VideoInDTO;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -47,8 +49,11 @@ public class YoutubeClient {
         VideoListResponse response = request.setId(Arrays.asList(id))
             .setKey(DEVELOPER_KEY)
             .execute();
-        System.out.println(response.getItems().get(0));
         return response;
+    }
+
+    public VideoInDTO getVideoInDTO(String id) throws GeneralSecurityException, IOException, GoogleJsonResponseException {
+        return new VideoInDTO(getVideo(id).getItems().get(0));
     }
 
     public PlaylistListResponse getPlaylist(String id) throws GeneralSecurityException, IOException, GoogleJsonResponseException {

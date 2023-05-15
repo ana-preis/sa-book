@@ -12,9 +12,9 @@ public record CategoryDTO(
         Integer userCount,
         Integer videoCount,
         Long viewCount,
-        List<VideoDTO> videoDTOList) {
+        List<VideoOutDTO> videoDTOList) {
 
-    public CategoryDTO(Category category, List<VideoDTO> videoList) {
+    public CategoryDTO(Category category, List<VideoOutDTO> videoList) {
         this (
                 category.getId(),
                 category.getName(),

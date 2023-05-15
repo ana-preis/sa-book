@@ -1,16 +1,17 @@
 package com.sa.youtube.services;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+import java.util.Optional;
 
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.sa.youtube.dtos.ReviewDTO;
-import com.sa.youtube.dtos.VideoDTO;
-import com.sa.youtube.dtos.VideoDetailsDTO;
-import com.sa.youtube.models.Review;
+import com.google.api.client.googleapis.json.GoogleJsonResponseException;
+import com.sa.youtube.clients.YoutubeClient;
+import com.sa.youtube.dtos.VideoOutDTO;
+import com.sa.youtube.dtos.VideoInDTO;
 import com.sa.youtube.models.Video;
 import com.sa.youtube.repositories.ReviewRepository;
 import com.sa.youtube.repositories.VideoRepository;
@@ -19,39 +20,50 @@ import com.sa.youtube.repositories.VideoRepository;
 public class VideoService {
 
     @Autowired
+    private YoutubeClient youtubeClient;
+
+    @Autowired
     private VideoRepository repository;
 
     @Autowired
     private ReviewRepository reviewRepository;
 
-    public VideoDTO getVideoById(String id) {
-        Video video = repository.findById(id).orElseThrow();
-        return new VideoDTO(video);
+    public VideoOutDTO getVideoById(String id) throws GeneralSecurityException, IOException, GoogleJsonResponseException {
+        Optional<Video> opt = repository.findById(id);
+        if (opt.isPresent()) {
+            return new VideoOutDTO(opt.get());
+        }
+        return new VideoOutDTO(youtubeClient.getVideoInDTO(id));
     }
 
     @Transactional
-    public Video createVideo(VideoDTO dto) {
-        Video video = new Video(dto);
-        Video newVideo = repository.save(video);
-        return newVideo;
+    public Video getOrCreateVideo(String id) throws GeneralSecurityException, IOException, GoogleJsonResponseException {
+        return repository.findById(id).orElse(createVideo(id));
     }
 
-    public VideoDetailsDTO getVideoDetails(String videoID) {
-        try {
-            VideoDTO videoDTO = getVideoById(videoID);
-            List<Review> reviews = reviewRepository.findByVideo_Id(videoID);
-            List<ReviewDTO> reviewDTOList = new ArrayList<>();
-            int sum = 0;
-            for (Review r : reviews) {
-                sum += r.getRating();
-                reviewDTOList.add(new ReviewDTO(r));
-            }
-            Integer totalReviews = reviews.size();
-            Double averageRating = (double) sum / totalReviews;
-            return new VideoDetailsDTO(videoDTO, reviewDTOList, averageRating, totalReviews);
-        } catch (Exception e) {
-            throw e;
-        }
-        
+    @Transactional
+    public Video createVideo(VideoInDTO dto) {
+        return repository.save(new Video(dto));
+    }
+
+    @Transactional
+    public Video createVideo(String id) throws GeneralSecurityException, IOException, GoogleJsonResponseException {
+        VideoInDTO dto = youtubeClient.getVideoInDTO(id);
+        return repository.save(new Video(dto));
+    }
+
+    @Transactional
+    public void updateVideoAverageRating(Video video) {
+        Double averageRating = reviewRepository.getAverageRating(video.getId());
+        video.setAverageRating(averageRating);
+        repository.save(video);
+    }
+
+    @Transactional
+    public void updateVideoAverageRating(String id) {
+        Video video = repository.findById(id).orElseThrow();
+        Double averageRating = reviewRepository.getAverageRating(id);
+        video.setAverageRating(averageRating);
+        repository.save(video);
     }
 }

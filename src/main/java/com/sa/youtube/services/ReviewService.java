@@ -1,7 +1,7 @@
 package com.sa.youtube.services;
 
+import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.sa.youtube.dtos.ReviewDTO;
-import com.sa.youtube.dtos.ReviewVideoForm;
 import com.sa.youtube.models.Review;
 import com.sa.youtube.models.User;
 import com.sa.youtube.models.Video;
@@ -11,7 +11,11 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -26,12 +30,17 @@ public class ReviewService {
     @Autowired
     private VideoService videoService;
 
+    public List<ReviewDTO> toReviewDTOList(Set<Review> reviews) {
+        return reviews.stream().map(ReviewDTO::new).toList();
+    }
+
     @Transactional
-    public ReviewDTO save(ReviewVideoForm form) {
-        User user = userRepository.findById(form.review().userID()).orElseThrow();
-        Video newVideo = videoService.createVideo(form.video());
-        Review newReview = new Review(form.review(), user, newVideo);
-        return new ReviewDTO(repository.save(newReview));
+    public ReviewDTO save(ReviewDTO dto) throws GeneralSecurityException, IOException, GoogleJsonResponseException {
+        User user = userRepository.findById(dto.userId()).orElseThrow();
+        Video video = videoService.getOrCreateVideo(dto.videoId());
+        Review review = repository.save(new Review(dto, user, video));
+        videoService.updateVideoAverageRating(video);
+        return new ReviewDTO(review);
     }
 
     public ReviewDTO getById(UUID id) {
@@ -46,7 +55,8 @@ public class ReviewService {
         } else {
             reviews = repository.findByVideo_Id(videoId);
         }
-        return ReviewDTO.toReviewDTOList(reviews);
+        Set<Review> set = new HashSet<>(reviews);
+        return toReviewDTOList(set);
     }
 
 }
