@@ -39,7 +39,7 @@ public class ReviewService {
         User user = userRepository.findById(dto.userId()).orElseThrow();
         Video video = videoService.getOrCreateVideo(dto.videoId());
         Review review = repository.save(new Review(dto, user, video));
-        videoService.updateVideoAverageRating(video);
+        videoService.updateVideoReviews(video, review);
         return new ReviewDTO(review);
     }
 

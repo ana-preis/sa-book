@@ -69,4 +69,8 @@ public class Video {
         this.viewCount = dto.viewCount();
     }
 
+    public void addReview(Review review) {
+        this.reviewList.add(review);
+    }
+
 }

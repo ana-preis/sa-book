@@ -1,6 +1,4 @@
 /*
-drop database test if exists;
-create database test;
 use test;
 
 INSERT INTO user_ (id, email, password_, username) values (UUID_TO_BIN("181d4695-6bc6-4958-8528-4a45de31d26f"), "ana@gmail.com", "1234", "ana");
