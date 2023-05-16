@@ -1,7 +1,6 @@
 package com.sa.youtube.services;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,17 +32,6 @@ public class CategoryService {
     }
 
     @Transactional
-    public CategoryDTO updateCategory(UUID categoryID, Video video) throws Exception {
-        Optional<Category> categoryOpt = repository.findById(categoryID);
-        if (categoryOpt.isPresent()) {
-            Category category = categoryOpt.get();
-            List<Video> videoList = category.getVideoList();
-            videoList.add(video);
-            category.setVideoList(videoList);
-            Category updatedCategory = repository.save(category);
-            List<VideoOutDTO> videoDTOList = VideoOutDTO.toVideoDTOList(updatedCategory.getVideoList());
-            return new CategoryDTO(updatedCategory, videoDTOList);
-        }
-        throw new Exception();
+    public void updateCategory(UUID categoryID, Video video) {
     }
 }

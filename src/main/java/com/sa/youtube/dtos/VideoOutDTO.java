@@ -78,7 +78,7 @@ public record VideoOutDTO(
         );
     }
 
-    public static List<VideoOutDTO> toVideoDTOList(List<Video> videoList) {
+    public static List<VideoOutDTO> toVideoDTOList(Set<Video> videoList) {
         return videoList.stream().map(VideoOutDTO::new).toList();
     }
 
