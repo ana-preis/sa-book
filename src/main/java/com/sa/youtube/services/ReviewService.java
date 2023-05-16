@@ -3,6 +3,7 @@ package com.sa.youtube.services;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.sa.youtube.dtos.ReviewDTO;
 import com.sa.youtube.models.Review;
+import com.sa.youtube.models.ReviewKey;
 import com.sa.youtube.models.User;
 import com.sa.youtube.models.Video;
 import com.sa.youtube.repositories.ReviewRepository;
@@ -16,7 +17,6 @@ import java.security.GeneralSecurityException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 
 @Service
 public class ReviewService {
@@ -39,11 +39,11 @@ public class ReviewService {
         User user = userRepository.findById(dto.userId()).orElseThrow();
         Video video = videoService.getOrCreateVideo(dto.videoId());
         Review review = repository.save(new Review(dto, user, video));
-        videoService.updateVideoReviews(video, review);
+        videoService.updateVideoReviews(video);
         return new ReviewDTO(review);
     }
 
-    public ReviewDTO getById(UUID id) {
+    public ReviewDTO getById(ReviewKey id) {
         Review review = repository.findById(id).orElseThrow();
         return new ReviewDTO(review);
     }

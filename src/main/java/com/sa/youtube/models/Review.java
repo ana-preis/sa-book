@@ -1,6 +1,5 @@
 package com.sa.youtube.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.api.client.util.DateTime;
 import com.sa.youtube.dtos.ReviewDTO;
 import jakarta.persistence.*;
@@ -18,13 +17,11 @@ public class Review{
     @EmbeddedId
     ReviewKey id;
 
-    @JsonIgnore
     @ManyToOne
     @MapsId("userId")
     @JoinColumn(name = "user_id")
     private User user;
 
-    @JsonIgnore
     @ManyToOne
     @MapsId("videoId")
     @JoinColumn(name = "video_id")

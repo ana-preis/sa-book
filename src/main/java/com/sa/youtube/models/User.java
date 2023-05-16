@@ -10,8 +10,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 
@@ -36,10 +36,15 @@ public class User {
     private String password;
 
     @OneToMany(mappedBy = "user")
-    private List<Review> reviewList = new ArrayList<>();
+    private Set<Review> reviewList = new HashSet<>();
 
-    @ManyToMany(mappedBy = "userList")
-    private List<Category> subscriptions = new ArrayList<>();
+    @ManyToMany
+    @JoinTable(
+        name = "user_category",
+        joinColumns = @JoinColumn(name = "user_id"),
+        inverseJoinColumns = @JoinColumn(name = "category_id")
+    )
+    private Set<Category> subscriptions = new HashSet<>();
 
     @ManyToMany
     @JoinTable(
@@ -47,7 +52,7 @@ public class User {
         joinColumns = @JoinColumn(name = "user_id"),
         inverseJoinColumns = @JoinColumn(name = "video_id")
     )
-    private List<Video> toWatchList = new ArrayList<>();
+    private Set<Video> toWatchList = new HashSet<>();
 
     @ManyToMany
     @JoinTable(
@@ -55,7 +60,7 @@ public class User {
         joinColumns = @JoinColumn(name = "user_id"),
         inverseJoinColumns = @JoinColumn(name = "video_id")
     )
-    private List<Video> finishedList = new ArrayList<>();
+    private Set<Video> finishedList = new HashSet<>();
 
 
     public User(UserForm dto) {

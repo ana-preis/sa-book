@@ -41,12 +41,19 @@ public class Video {
     
     private Long viewCount;
 
+    private Long reviewCount;
+
     private Double averageRating;
 
     @OneToMany(mappedBy = "video")
     private Set<Review> reviewList = new HashSet<>();
 
-    @ManyToMany(mappedBy = "videoList")
+    @ManyToMany
+    @JoinTable(
+        name = "video_category",
+        joinColumns = @JoinColumn(name = "video_id"),
+        inverseJoinColumns = @JoinColumn(name = "category_id")
+    )
     private Set<Category> categoryList = new HashSet<>();
 
     @ManyToMany(mappedBy = "toWatchList")
@@ -67,10 +74,6 @@ public class Video {
         this.channelTitle = dto.channelTitle();
         this.likeCount = dto.likeCount();
         this.viewCount = dto.viewCount();
-    }
-
-    public void addReview(Review review) {
-        this.reviewList.add(review);
     }
 
 }

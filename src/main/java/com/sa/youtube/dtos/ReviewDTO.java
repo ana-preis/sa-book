@@ -14,17 +14,17 @@ import java.util.UUID;
 
 public record ReviewDTO(
 
-        @Min(value = 0)
-        @Max(value = 10)
-        Integer rating,
-
-        String text,
-
         @NotNull
         UUID userId,
 
         @NotBlank
         String videoId,
+
+        @Min(value = 0)
+        @Max(value = 10)
+        Integer rating,
+
+        String text,
 
         @NotNull
         Long publishedAt
@@ -33,10 +33,10 @@ public record ReviewDTO(
 
         public ReviewDTO(Review review) {
             this (
+                review.getId().getUserId(),
+                review.getId().getVideoId(),
                 review.getRating(),
                 review.getText(),
-                review.getUser().getId(),
-                review.getVideo().getId(),
                 review.getPublishedAt().getValue()
             );
         }

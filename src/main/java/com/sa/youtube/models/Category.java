@@ -6,7 +6,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 
@@ -24,25 +26,12 @@ public class Category {
 
     private String description;
 
-    @ManyToMany
-    @JoinTable(
-        name = "category_user",
-        joinColumns = @JoinColumn(name = "category_id"),
-        inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
+    private Long viewCount;
+
+    @ManyToMany(mappedBy = "subscriptions")
     private List<User> userList = new ArrayList<>();
 
-    @ManyToMany
-    @JoinTable(
-        name = "category_video",
-        joinColumns = @JoinColumn(name = "category_id"),
-        inverseJoinColumns = @JoinColumn(name = "video_id")
-    )
-    private List<Video> videoList = new ArrayList<>();
-
-
-    public Long getViewCount() {
-        return 0L;
-    }
+    @ManyToMany(mappedBy = "categoryList")
+    private Set<Video> videoList = new HashSet<>();
 
 }

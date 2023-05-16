@@ -12,7 +12,6 @@ import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.sa.youtube.clients.YoutubeClient;
 import com.sa.youtube.dtos.VideoOutDTO;
 import com.sa.youtube.dtos.VideoInDTO;
-import com.sa.youtube.models.Review;
 import com.sa.youtube.models.Video;
 import com.sa.youtube.repositories.ReviewRepository;
 import com.sa.youtube.repositories.VideoRepository;
@@ -32,8 +31,7 @@ public class VideoService {
     public VideoOutDTO getVideoById(String id) throws GeneralSecurityException, IOException, GoogleJsonResponseException {
         Optional<Video> opt = repository.findById(id);
         if (opt.isPresent()) {
-            System.out.println(opt.get().toString());
-            return new VideoOutDTO(opt.get());
+            return new VideoOutDTO(opt.get(), reviewRepository.getReviewDTOsByVideoId(id));
         }
         return new VideoOutDTO(youtubeClient.getVideoInDTO(id));
     }
@@ -55,8 +53,9 @@ public class VideoService {
     }
 
     @Transactional
-    public void updateVideoReviews(Video video, Review review) {
-        //video.addReview(review);
+    public void updateVideoReviews(Video video) {
+        Long reviewCount = reviewRepository.getReviewCount(video.getId());
+        video.setReviewCount(reviewCount);
         Double averageRating = reviewRepository.getAverageRating(video.getId());
         video.setAverageRating(averageRating);
         repository.save(video);

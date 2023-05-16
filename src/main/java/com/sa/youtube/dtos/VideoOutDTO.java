@@ -18,11 +18,29 @@ public record VideoOutDTO(
     String channelTitle,
     Long likeCount,
     Long viewCount,
-    Integer reviewCount,
-    Double averageRating/*,
-    List<ReviewDTO> reviews*/
+    Long reviewCount,
+    Double averageRating,
+    List<ReviewDTO> reviews
 
 ) {
+
+    public VideoOutDTO(Video video, List<ReviewDTO> reviews) {
+        this(
+            video.getId(),
+            video.getTitle(),
+            video.getEmbedHtml(),
+            video.getThumbnailUrl(),
+            video.getDescription(),
+            video.getTags(),
+            video.getPublishedAt().getValue(),
+            video.getChannelTitle(),
+            video.getLikeCount(),
+            video.getViewCount(),
+            video.getReviewCount(),
+            video.getAverageRating(),
+            reviews
+        );
+    }
 
     public VideoOutDTO(Video video) {
         this(
@@ -36,9 +54,9 @@ public record VideoOutDTO(
             video.getChannelTitle(),
             video.getLikeCount(),
             video.getViewCount(),
-            video.getReviewList().size(),
-            video.getAverageRating()/*,
-            ReviewDTO.toReviewDTOList(video.getReviewList())*/
+            video.getReviewCount(),
+            video.getAverageRating(),
+            null
         );
     }
 
@@ -55,8 +73,8 @@ public record VideoOutDTO(
             dto.likeCount(),
             dto.viewCount(),
             null,
-            null/*,
-            null*/
+            null,
+            null
         );
     }
 

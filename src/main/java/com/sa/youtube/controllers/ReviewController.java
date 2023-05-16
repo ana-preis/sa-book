@@ -2,6 +2,7 @@ package com.sa.youtube.controllers;
 
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.sa.youtube.dtos.ReviewDTO;
+import com.sa.youtube.models.ReviewKey;
 import com.sa.youtube.services.ReviewService;
 
 import jakarta.validation.Valid;
@@ -37,7 +38,7 @@ public class ReviewController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ReviewDTO> retrieve(@PathVariable UUID id) {
+    public ResponseEntity<ReviewDTO> retrieve(@PathVariable ReviewKey id) {
         ReviewDTO review = service.getById(id);
         return new ResponseEntity<ReviewDTO>(review, HttpStatus.OK);
     }
