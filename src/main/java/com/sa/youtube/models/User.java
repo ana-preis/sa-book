@@ -3,16 +3,17 @@ package com.sa.youtube.models;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
-import com.sa.youtube.dtos.UserForm;
+import com.sa.youtube.dtos.UserInDTO;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
+
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,31 +21,52 @@ import java.util.UUID;
 @Entity
 @Table(name="user_")
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
     @NotNull(message = "Name can't be null")
     private String username;
+
     @Email
     private String email;
+
+    @Column(name = "password_")
     private String password;
-    @ManyToMany
-    private List<Video> toWatchList = new ArrayList<>();
-    @ManyToMany
-    private List<Video> finishedList = new ArrayList<>();
+
     @OneToMany(mappedBy = "user")
-    private List<Message> messageList = new ArrayList<>();
+    private Set<Review> reviewList = new HashSet<>();
 
-    /*
-    @Embedded
-    private File profilePicture;
-    */
+    @ManyToMany
+    @JoinTable(
+        name = "user_category",
+        joinColumns = @JoinColumn(name = "user_id"),
+        inverseJoinColumns = @JoinColumn(name = "category_id")
+    )
+    private Set<Category> subscriptions = new HashSet<>();
 
-    public User(UserForm dto) {
+    @ManyToMany
+    @JoinTable(
+        name = "user_video_to_watch",
+        joinColumns = @JoinColumn(name = "user_id"),
+        inverseJoinColumns = @JoinColumn(name = "video_id")
+    )
+    private Set<Video> toWatchList = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(
+        name = "user_video_finished",
+        joinColumns = @JoinColumn(name = "user_id"),
+        inverseJoinColumns = @JoinColumn(name = "video_id")
+    )
+    private Set<Video> finishedList = new HashSet<>();
+
+
+    public User(UserInDTO dto) {
         this.username = dto.username();
         this.email = dto.email();
         this.password = dto.password();
     }
-
 
 }

@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/category")
+@RequestMapping("/categories")
 public class CategoryController {
 
     @Autowired
@@ -21,17 +21,14 @@ public class CategoryController {
 
     @GetMapping("/{categoryID}")
     public ResponseEntity<CategoryDTO> getByID(@PathVariable UUID categoryID) {
-        try {
-            CategoryDTO categoryDTO = service.getById(categoryID);
-            return new ResponseEntity<>(categoryDTO, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        CategoryDTO categoryDTO = service.getById(categoryID);
+        return new ResponseEntity<CategoryDTO>(categoryDTO, HttpStatus.OK);
     }
 
-    @GetMapping("")
+    @GetMapping
     public ResponseEntity<List<Category>> search(@RequestParam(defaultValue = "") String text) {
         List<Category> categoryList = service.getByName(text);
         return new ResponseEntity<>(categoryList, HttpStatus.OK);
     }
+
 }

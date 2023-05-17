@@ -11,6 +11,8 @@ import com.google.api.services.youtube.model.PlaylistItemListResponse;
 import com.google.api.services.youtube.model.PlaylistListResponse;
 import com.google.api.services.youtube.model.SearchListResponse;
 import com.google.api.services.youtube.model.VideoListResponse;
+import com.sa.youtube.dtos.VideoInDTO;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -47,7 +49,12 @@ public class YoutubeClient {
         VideoListResponse response = request.setId(Arrays.asList(id))
             .setKey(DEVELOPER_KEY)
             .execute();
+        System.out.println(response.toPrettyString());
         return response;
+    }
+
+    public VideoInDTO getVideoInDTO(String id) throws GeneralSecurityException, IOException, GoogleJsonResponseException {
+        return new VideoInDTO(getVideo(id).getItems().get(0));
     }
 
     public PlaylistListResponse getPlaylist(String id) throws GeneralSecurityException, IOException, GoogleJsonResponseException {
@@ -70,22 +77,15 @@ public class YoutubeClient {
         return response;
     }
 
-    public SearchListResponse getSearchList(String keyword, String type) throws GeneralSecurityException, IOException, GoogleJsonResponseException {
+    public SearchListResponse getSearchList(String keyword) throws GeneralSecurityException, IOException, GoogleJsonResponseException {
         YouTube youtubeService = getService();
         // Define and execute the API request
         YouTube.Search.List request = youtubeService.search()
             .list(Arrays.asList("snippet"));
-        SearchListResponse response = request.setMaxResults(25L).setQ(keyword).setType(Arrays.asList(type))
+        SearchListResponse response = request.setMaxResults(25L).setQ(keyword).setType(Arrays.asList("video"))
             .setKey(DEVELOPER_KEY)
             .execute();
         return response;
     }
-
-    /**
-     * Call function to create API service object. Define and
-     * execute API request. Print API response.
-     *
-     * @throws GeneralSecurityException, IOException, GoogleJsonResponseException
-     */
 
 }

@@ -1,6 +1,5 @@
 package com.sa.youtube.services;
 
-import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,8 +7,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.sa.youtube.dtos.UserDTO;
-import com.sa.youtube.dtos.UserForm;
+import com.sa.youtube.dtos.UserOutDTO;
+import com.sa.youtube.dtos.UserInDTO;
 import com.sa.youtube.models.User;
 import com.sa.youtube.repositories.UserRepository;
 
@@ -22,41 +21,34 @@ public class UserService {
     private UserRepository repository;
 
     @Transactional
-    public UserDTO createUser(UserForm userForm) {
+    public UserOutDTO createUser(UserInDTO userForm) {
         User saved = repository.save(new User(userForm));
-        return new UserDTO(saved);
+        return new UserOutDTO(saved);
     }
 
-    public UserDTO getUserById(UUID id) throws Exception {
-        Optional<User> userOpt = repository.findById(id);
-        if (userOpt.isPresent()) {
-            return new UserDTO(userOpt.get());
-        }
-        throw new Exception();
+    public UserOutDTO getUserById(UUID id) {
+        User user = repository.findById(id).orElseThrow();
+        return new UserOutDTO(user);
     }
 
-    public Page<UserDTO> getUsers(Pageable page) {
-        Page<UserDTO> users = repository.findAll(page).map(UserDTO::new);
+    public Page<UserOutDTO> getUsers(Pageable page) {
+        Page<UserOutDTO> users = repository.findAll(page).map(UserOutDTO::new);
         return users;
     }
 
     @Transactional
-    public UserDTO updateUser(UserForm userForm, UUID id) throws Exception {
-        Optional<User> userOpt = repository.findById(id);
-        if (userOpt.isPresent()) {
-            User user = userOpt.get();
-            if (userForm.email() != null) {
-                user.setEmail(userForm.email());
-            }
-            if (userForm.username() != null) {
-                user.setUsername(userForm.username());
-            }
-            if (userForm.password() != null) {
-                user.setPassword(userForm.password());
-            }
-            return new UserDTO(repository.save(user));
+    public UserOutDTO updateUser(UserInDTO userForm, UUID id) {
+        User user = repository.findById(id).orElseThrow();
+        if (userForm.email() != null) {
+            user.setEmail(userForm.email());
         }
-        throw new Exception();
+        if (userForm.username() != null) {
+            user.setUsername(userForm.username());
+        }
+        if (userForm.password() != null) {
+            user.setPassword(userForm.password());
+        }
+        return new UserOutDTO(repository.save(user));
     }
 
     @Transactional

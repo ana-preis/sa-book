@@ -1,17 +1,16 @@
 package com.sa.youtube.services;
 
-import java.util.ArrayList;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.List;
-import java.util.Optional;
 
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.sa.youtube.dtos.ReviewDTO;
-import com.sa.youtube.dtos.VideoDTO;
-import com.sa.youtube.dtos.VideoDetailsDTO;
-import com.sa.youtube.models.Review;
+import com.google.api.client.googleapis.json.GoogleJsonResponseException;
+import com.sa.youtube.clients.YoutubeClient;
+import com.sa.youtube.dtos.VideoOutDTO;
+import com.sa.youtube.dtos.ReviewOutDTO;
 import com.sa.youtube.models.Video;
 import com.sa.youtube.repositories.ReviewRepository;
 import com.sa.youtube.repositories.VideoRepository;
@@ -20,42 +19,21 @@ import com.sa.youtube.repositories.VideoRepository;
 public class VideoService {
 
     @Autowired
-    private VideoRepository repository;
+    private YoutubeClient youtubeClient;
 
     @Autowired
     private ReviewRepository reviewRepository;
 
-    public VideoDTO getVideoById(String id) throws Exception {
-        Optional<Video> videoOpt = repository.findById(id);
-        if (videoOpt.isPresent()) {
-            return new VideoDTO(videoOpt.get());
+    @Autowired
+    private VideoRepository videoRepository;
+
+    public VideoOutDTO getVideoById(String id) throws GeneralSecurityException, IOException, GoogleJsonResponseException {
+        if (videoRepository.existsById(id)) {
+            Video video = videoRepository.findById(id).orElseThrow();
+            List<ReviewOutDTO> reviews = reviewRepository.getReviewDTOsByVideoId(id);
+            return new VideoOutDTO(video, reviews);
         }
-        throw new Exception();
+        return new VideoOutDTO(youtubeClient.getVideoInDTO(id));
     }
 
-    @Transactional
-    public Video createVideo(VideoDTO dto) {
-        Video video = new Video(dto);
-        Video newVideo = repository.save(video);
-        return newVideo;
-    }
-
-    public VideoDetailsDTO getVideoDetails(String videoID) throws Exception {
-        try {
-            VideoDTO videoDTO = getVideoById(videoID);
-            List<Review> reviews = reviewRepository.findByVideo_Id(videoID);
-            List<ReviewDTO> reviewDTOList = new ArrayList<>();
-            int sum = 0;
-            for (Review r : reviews) {
-                sum += r.getRating();
-                reviewDTOList.add(new ReviewDTO(r));
-            }
-            Integer totalReviews = reviews.size();
-            Double averageRating = (double) sum / totalReviews;
-            return new VideoDetailsDTO(videoDTO, reviewDTOList, averageRating, totalReviews);
-        } catch (Exception e) {
-            throw e;
-        }
-        
-    }
 }

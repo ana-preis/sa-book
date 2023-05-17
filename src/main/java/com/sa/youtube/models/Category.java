@@ -6,25 +6,32 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
+
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Entity
 public class Category {
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    private String name;
-    private String description;
-    @OneToMany
-    private List<User> userList = new ArrayList<>();
-    @ManyToMany
-    private List<Video> videoList = new ArrayList<>();
 
-    public Long getViewCount() {
-        return 0L;
-    }
+    private String name;
+
+    private String description;
+
+    private Long viewCount;
+
+    @ManyToMany(mappedBy = "subscriptions")
+    private List<User> userList = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "categoryList")
+    private Set<Video> videoList = new HashSet<>();
+
 }
