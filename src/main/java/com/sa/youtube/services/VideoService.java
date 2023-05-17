@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.sa.youtube.clients.YoutubeClient;
 import com.sa.youtube.dtos.VideoOutDTO;
-import com.sa.youtube.dtos.ReviewDTO;
+import com.sa.youtube.dtos.ReviewOutDTO;
 import com.sa.youtube.models.Video;
 import com.sa.youtube.repositories.ReviewRepository;
 import com.sa.youtube.repositories.VideoRepository;
@@ -30,7 +30,7 @@ public class VideoService {
     public VideoOutDTO getVideoById(String id) throws GeneralSecurityException, IOException, GoogleJsonResponseException {
         if (videoRepository.existsById(id)) {
             Video video = videoRepository.findById(id).orElseThrow();
-            List<ReviewDTO> reviews = reviewRepository.getReviewDTOsByVideoId(id);
+            List<ReviewOutDTO> reviews = reviewRepository.getReviewDTOsByVideoId(id);
             return new VideoOutDTO(video, reviews);
         }
         return new VideoOutDTO(youtubeClient.getVideoInDTO(id));

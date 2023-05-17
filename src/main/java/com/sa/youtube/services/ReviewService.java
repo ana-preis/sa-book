@@ -2,7 +2,7 @@ package com.sa.youtube.services;
 
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.sa.youtube.clients.YoutubeClient;
-import com.sa.youtube.dtos.ReviewDTO;
+import com.sa.youtube.dtos.ReviewOutDTO;
 import com.sa.youtube.dtos.ReviewInDTO;
 import com.sa.youtube.dtos.VideoInDTO;
 import com.sa.youtube.models.Category;
@@ -46,7 +46,7 @@ public class ReviewService {
 
     
     @Transactional
-    public ReviewDTO createReview(ReviewInDTO dto) throws GeneralSecurityException, IOException, GoogleJsonResponseException {
+    public ReviewOutDTO createReview(ReviewInDTO dto) throws GeneralSecurityException, IOException, GoogleJsonResponseException {
         
         User user = userRepository.findById(dto.userId()).orElseThrow();
         
@@ -59,15 +59,15 @@ public class ReviewService {
         Review review = reviewRepository.save(new Review(dto, user, video));
         updateVideoReviews(video);
 
-        return new ReviewDTO(review);
+        return new ReviewOutDTO(review);
     }
     
-    public ReviewDTO getById(ReviewKey id) {
+    public ReviewOutDTO getById(ReviewKey id) {
         Review review = reviewRepository.findById(id).orElseThrow();
-        return new ReviewDTO(review);
+        return new ReviewOutDTO(review);
     }
     
-    public List<ReviewDTO> search(String videoId) {
+    public List<ReviewOutDTO> search(String videoId) {
         List<Review> reviews;
         if (videoId.equals("")){
             reviews = reviewRepository.findAll();
@@ -105,8 +105,8 @@ public class ReviewService {
         }
     }
 
-    public List<ReviewDTO> toReviewDTOList(Set<Review> reviews) {
-        return reviews.stream().map(ReviewDTO::new).toList();
+    public List<ReviewOutDTO> toReviewDTOList(Set<Review> reviews) {
+        return reviews.stream().map(ReviewOutDTO::new).toList();
     }
 
 }

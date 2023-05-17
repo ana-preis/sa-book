@@ -5,7 +5,7 @@ import com.sa.youtube.models.Review;
 import java.util.UUID;
 
 
-public record ReviewDTO(
+public record ReviewOutDTO(
 
     UUID userId,
     String videoId,
@@ -15,7 +15,7 @@ public record ReviewDTO(
 
 ) {
 
-    public ReviewDTO(Review review) {
+    public ReviewOutDTO(Review review) {
         this (
             review.getId().getUserId(),
             review.getId().getVideoId(),

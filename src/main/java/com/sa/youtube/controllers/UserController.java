@@ -1,7 +1,7 @@
 package com.sa.youtube.controllers;
 
-import com.sa.youtube.dtos.UserDTO;
-import com.sa.youtube.dtos.UserForm;
+import com.sa.youtube.dtos.UserOutDTO;
+import com.sa.youtube.dtos.UserInDTO;
 import com.sa.youtube.services.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,31 +23,31 @@ public class UserController {
     private UserService service;
 
     @GetMapping("/{userID}")
-    public ResponseEntity<UserDTO> getByID(@PathVariable UUID userID) {
+    public ResponseEntity<UserOutDTO> getByID(@PathVariable UUID userID) {
         try {
-            UserDTO user = service.getUserById(userID);
-            return new ResponseEntity<UserDTO>(user, HttpStatus.OK);
+            UserOutDTO user = service.getUserById(userID);
+            return new ResponseEntity<UserOutDTO>(user, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
     @GetMapping
-    public ResponseEntity<Page<UserDTO>> getAll(Pageable page) {
-        Page<UserDTO> users = service.getUsers(page);
+    public ResponseEntity<Page<UserOutDTO>> getAll(Pageable page) {
+        Page<UserOutDTO> users = service.getUsers(page);
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<UserDTO> save(@RequestBody @Valid UserForm userForm) {
-        UserDTO newUser = service.createUser(userForm);
-        return new ResponseEntity<UserDTO>(newUser, HttpStatus.CREATED);
+    public ResponseEntity<UserOutDTO> save(@RequestBody @Valid UserInDTO userForm) {
+        UserOutDTO newUser = service.createUser(userForm);
+        return new ResponseEntity<UserOutDTO>(newUser, HttpStatus.CREATED);
     }
 
     @PatchMapping("/{userID}")
-    public ResponseEntity<UserDTO> update(@RequestBody @Valid UserForm userForm, @PathVariable UUID userID) {
+    public ResponseEntity<UserOutDTO> update(@RequestBody @Valid UserInDTO userForm, @PathVariable UUID userID) {
         try {
-            UserDTO userDTO = service.updateUser(userForm, userID);
+            UserOutDTO userDTO = service.updateUser(userForm, userID);
             return new ResponseEntity<>(userDTO, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

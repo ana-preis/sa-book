@@ -3,7 +3,7 @@ package com.sa.youtube.models;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
-import com.sa.youtube.dtos.UserForm;
+import com.sa.youtube.dtos.UserInDTO;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -63,7 +63,7 @@ public class User {
     private Set<Video> finishedList = new HashSet<>();
 
 
-    public User(UserForm dto) {
+    public User(UserInDTO dto) {
         this.username = dto.username();
         this.email = dto.email();
         this.password = dto.password();

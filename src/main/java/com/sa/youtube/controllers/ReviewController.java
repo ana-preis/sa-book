@@ -1,7 +1,7 @@
 package com.sa.youtube.controllers;
 
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
-import com.sa.youtube.dtos.ReviewDTO;
+import com.sa.youtube.dtos.ReviewOutDTO;
 import com.sa.youtube.dtos.ReviewInDTO;
 import com.sa.youtube.models.ReviewKey;
 import com.sa.youtube.services.ReviewService;
@@ -26,28 +26,28 @@ public class ReviewController {
     private ReviewService service;
 
     @PostMapping
-    public ResponseEntity<ReviewDTO> create(@RequestBody @Valid ReviewInDTO dto)
+    public ResponseEntity<ReviewOutDTO> create(@RequestBody @Valid ReviewInDTO dto)
         throws GeneralSecurityException, IOException, GoogleJsonResponseException {
-            ReviewDTO newReview = service.createReview(dto);
+            ReviewOutDTO newReview = service.createReview(dto);
             return new ResponseEntity<>(newReview, HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<List<ReviewDTO>> search(@RequestParam(defaultValue = "") String videoId) {
-        List<ReviewDTO> reviews = service.search(videoId);
+    public ResponseEntity<List<ReviewOutDTO>> search(@RequestParam(defaultValue = "") String videoId) {
+        List<ReviewOutDTO> reviews = service.search(videoId);
         return new ResponseEntity<>(reviews, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ReviewDTO> retrieve(@PathVariable ReviewKey id) {
-        ReviewDTO review = service.getById(id);
-        return new ResponseEntity<ReviewDTO>(review, HttpStatus.OK);
+    public ResponseEntity<ReviewOutDTO> retrieve(@PathVariable ReviewKey id) {
+        ReviewOutDTO review = service.getById(id);
+        return new ResponseEntity<ReviewOutDTO>(review, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ReviewDTO> update(@PathVariable UUID id) {
-        ReviewDTO dto = new ReviewDTO(null);
-        return new ResponseEntity<ReviewDTO>(dto, HttpStatus.OK);
+    public ResponseEntity<ReviewOutDTO> update(@PathVariable UUID id) {
+        ReviewOutDTO dto = new ReviewOutDTO(null);
+        return new ResponseEntity<ReviewOutDTO>(dto, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

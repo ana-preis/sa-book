@@ -5,7 +5,7 @@ import com.sa.youtube.models.User;
 import java.util.UUID;
 
 
-public record UserDTO(
+public record UserOutDTO(
 
         UUID id,
         String username,
@@ -13,7 +13,7 @@ public record UserDTO(
 
     ) {
 
-        public UserDTO(User user) {
+        public UserOutDTO(User user) {
             this(
                 user.getId(),
                 user.getUsername(),

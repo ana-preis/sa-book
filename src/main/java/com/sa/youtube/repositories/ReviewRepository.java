@@ -1,6 +1,6 @@
 package com.sa.youtube.repositories;
 
-import com.sa.youtube.dtos.ReviewDTO;
+import com.sa.youtube.dtos.ReviewOutDTO;
 import com.sa.youtube.models.Review;
 import com.sa.youtube.models.ReviewKey;
 
@@ -25,17 +25,17 @@ public interface ReviewRepository extends JpaRepository<Review, ReviewKey> {
     Long getReviewCount(@Param("videoId") String videoId);
 
     @Query("""            
-        SELECT new com.sa.youtube.dtos.ReviewDTO(r)
+        SELECT new com.sa.youtube.dtos.ReviewOutDTO(r)
         FROM Review r
         WHERE r.id.videoId = :videoId
     """)
-    List<ReviewDTO> getReviewDTOsByVideoId(@Param("videoId") String videoId);
+    List<ReviewOutDTO> getReviewDTOsByVideoId(@Param("videoId") String videoId);
 
     @Query("""            
-        SELECT new com.sa.youtube.dtos.ReviewDTO(r)
+        SELECT new com.sa.youtube.dtos.ReviewOutDTO(r)
         FROM Review r
         WHERE r.id.userId = :userId
     """)
-    List<ReviewDTO> getReviewDTOsByUserId(@Param("userId") String userId);
+    List<ReviewOutDTO> getReviewDTOsByUserId(@Param("userId") String userId);
 
 }
