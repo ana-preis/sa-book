@@ -29,9 +29,6 @@ public class Video {
     
     @Column(length = 5000)
     private String description;
-
-    @ElementCollection
-    private Set<String> tags = new HashSet<>();
     
     private DateTime publishedAt;
     
@@ -69,7 +66,6 @@ public class Video {
         this.embedHtml = dto.embedHtml();
         this.thumbnailUrl = dto.thumbnailUrl();
         this.description = dto.description();
-        this.tags = dto.tags();
         this.publishedAt = new DateTime(dto.publishedAt());
         this.channelTitle = dto.channelTitle();
         this.likeCount = dto.likeCount();

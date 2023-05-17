@@ -28,7 +28,7 @@ public class ReviewController {
     @PostMapping
     public ResponseEntity<ReviewDTO> create(@RequestBody @Valid ReviewInDTO dto)
         throws GeneralSecurityException, IOException, GoogleJsonResponseException {
-            ReviewDTO newReview = service.save(dto);
+            ReviewDTO newReview = service.createReview(dto);
             return new ResponseEntity<>(newReview, HttpStatus.CREATED);
     }
 

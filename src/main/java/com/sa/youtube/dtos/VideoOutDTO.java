@@ -1,7 +1,6 @@
 package com.sa.youtube.dtos;
 
 import java.util.List;
-import java.util.Set;
 
 import com.sa.youtube.models.Video;
 
@@ -13,7 +12,6 @@ public record VideoOutDTO(
     String embedHtml,
     String thumbnailUrl,
     String description,
-    Set<String> tags,
     Long publishedAt,
     String channelTitle,
     Long likeCount,
@@ -31,7 +29,6 @@ public record VideoOutDTO(
             video.getEmbedHtml(),
             video.getThumbnailUrl(),
             video.getDescription(),
-            video.getTags(),
             video.getPublishedAt().getValue(),
             video.getChannelTitle(),
             video.getLikeCount(),
@@ -49,7 +46,6 @@ public record VideoOutDTO(
             video.getEmbedHtml(),
             video.getThumbnailUrl(),
             video.getDescription(),
-            video.getTags(),
             video.getPublishedAt().getValue(),
             video.getChannelTitle(),
             video.getLikeCount(),
@@ -67,7 +63,6 @@ public record VideoOutDTO(
             dto.embedHtml(),
             dto.thumbnailUrl(),
             dto.description(),
-            dto.tags(),
             dto.publishedAt(),
             dto.channelTitle(),
             dto.likeCount(),
@@ -76,10 +71,6 @@ public record VideoOutDTO(
             null,
             null
         );
-    }
-
-    public static List<VideoOutDTO> toVideoDTOList(Set<Video> videoList) {
-        return videoList.stream().map(VideoOutDTO::new).toList();
     }
 
 }

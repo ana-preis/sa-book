@@ -27,17 +27,20 @@ public class VideoController {
     @Autowired
     private VideoService service;
 
+    /*
     @PostMapping("/{id}")
     public ResponseEntity<VideoOutDTO> create(@PathVariable String id)
         throws GeneralSecurityException, IOException, GoogleJsonResponseException {
             VideoOutDTO dto = new VideoOutDTO(service.createVideo(id));
             return new ResponseEntity<VideoOutDTO>(dto, HttpStatus.CREATED);
     }
+    */
 
     @GetMapping("/{id}")
-    public ResponseEntity<VideoOutDTO> retrieve(@PathVariable String id) throws GeneralSecurityException, IOException {
-        VideoOutDTO dto = service.getVideoById(id);
-        return new ResponseEntity<VideoOutDTO>(dto, HttpStatus.OK);
+    public ResponseEntity<VideoOutDTO> retrieve(@PathVariable String id)
+        throws GeneralSecurityException, IOException, GoogleJsonResponseException {
+            VideoOutDTO dto = service.getVideoById(id);
+            return new ResponseEntity<VideoOutDTO>(dto, HttpStatus.OK);
     }
 
     @GetMapping
