@@ -30,4 +30,9 @@ public class CategoryController {
         List<Category> categoryList = service.getByName(text);
         return new ResponseEntity<>(categoryList, HttpStatus.OK);
     }
+
+    @PostMapping("/{categoryId}/video/{videoId}")
+    public ResponseEntity<CategoryDTO> assignCategoryToVideo(@PathVariable UUID categoryId, @PathVariable String videoId) {
+        return new ResponseEntity<CategoryDTO>(service.updateCategory(categoryId, videoId), HttpStatus.OK);
+    }
 }

@@ -1,7 +1,8 @@
 package com.sa.youtube.models;
 
 import com.google.api.client.util.DateTime;
-import com.sa.youtube.dtos.ReviewDTO;
+import com.sa.youtube.dtos.ReviewInDTO;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -32,7 +33,7 @@ public class Review{
     private DateTime publishedAt;
 
 
-    public Review(ReviewDTO dto, User user, Video video) {
+    public Review(ReviewInDTO dto, User user, Video video) {
         this.id = new ReviewKey(dto.userId(), dto.videoId());
         this.user = user;
         this.video = video;

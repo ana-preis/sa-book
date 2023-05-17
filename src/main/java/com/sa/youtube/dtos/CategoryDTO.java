@@ -19,10 +19,22 @@ public record CategoryDTO(
                 category.getId(),
                 category.getName(),
                 category.getDescription(),
-                category.getUserList().size(),
-                category.getVideoList().size(),
+                null,//category.getUserList().size(),
+                videoList.size(),
                 category.getViewCount(),
                 videoList
+        );
+    }
+
+    public CategoryDTO(Category category) {
+        this (
+                category.getId(),
+                category.getName(),
+                category.getDescription(),
+                null,
+                null,
+                null,
+                null
         );
     }
 

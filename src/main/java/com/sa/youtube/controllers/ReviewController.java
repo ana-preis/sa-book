@@ -2,6 +2,7 @@ package com.sa.youtube.controllers;
 
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.sa.youtube.dtos.ReviewDTO;
+import com.sa.youtube.dtos.ReviewInDTO;
 import com.sa.youtube.models.ReviewKey;
 import com.sa.youtube.services.ReviewService;
 
@@ -25,7 +26,7 @@ public class ReviewController {
     private ReviewService service;
 
     @PostMapping
-    public ResponseEntity<ReviewDTO> create(@RequestBody @Valid ReviewDTO dto)
+    public ResponseEntity<ReviewDTO> create(@RequestBody @Valid ReviewInDTO dto)
         throws GeneralSecurityException, IOException, GoogleJsonResponseException {
             ReviewDTO newReview = service.save(dto);
             return new ResponseEntity<>(newReview, HttpStatus.CREATED);

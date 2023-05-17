@@ -2,6 +2,7 @@ package com.sa.youtube.services;
 
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.sa.youtube.dtos.ReviewDTO;
+import com.sa.youtube.dtos.ReviewInDTO;
 import com.sa.youtube.models.Review;
 import com.sa.youtube.models.ReviewKey;
 import com.sa.youtube.models.User;
@@ -28,6 +29,9 @@ public class ReviewService {
     private UserRepository userRepository;
 
     @Autowired
+    private CategoryService categoryService;
+
+    @Autowired
     private VideoService videoService;
 
     public List<ReviewDTO> toReviewDTOList(Set<Review> reviews) {
@@ -35,9 +39,10 @@ public class ReviewService {
     }
 
     @Transactional
-    public ReviewDTO save(ReviewDTO dto) throws GeneralSecurityException, IOException, GoogleJsonResponseException {
+    public ReviewDTO save(ReviewInDTO dto) throws GeneralSecurityException, IOException, GoogleJsonResponseException {
         User user = userRepository.findById(dto.userId()).orElseThrow();
         Video video = videoService.getOrCreateVideo(dto.videoId());
+        //videoService.updateVideoCategories(video, categoryService.getAllByIds(dto.categoryIdList()));
         Review review = repository.save(new Review(dto, user, video));
         videoService.updateVideoReviews(video);
         return new ReviewDTO(review);

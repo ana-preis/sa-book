@@ -2,6 +2,7 @@ package com.sa.youtube.services;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.List;
 import java.util.Optional;
 
 import jakarta.transaction.Transactional;
@@ -12,6 +13,7 @@ import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.sa.youtube.clients.YoutubeClient;
 import com.sa.youtube.dtos.VideoOutDTO;
 import com.sa.youtube.dtos.VideoInDTO;
+import com.sa.youtube.models.Category;
 import com.sa.youtube.models.Video;
 import com.sa.youtube.repositories.ReviewRepository;
 import com.sa.youtube.repositories.VideoRepository;
@@ -59,6 +61,15 @@ public class VideoService {
         Double averageRating = reviewRepository.getAverageRating(video.getId());
         video.setAverageRating(averageRating);
         repository.save(video);
+    }
+
+    @Transactional
+    public Boolean updateVideoCategory(Video video, Category category) {
+        if (video.addCategory(category)) {
+            repository.save(video);
+            return true;
+        }
+        return false;
     }
 
 }

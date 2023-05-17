@@ -76,4 +76,12 @@ public class Video {
         this.viewCount = dto.viewCount();
     }
 
+    public Boolean addCategory(Category category) {
+        return this.categoryList.add(category);
+    }
+
+    public Boolean removeCategory(Category category) {
+        return this.categoryList.remove(category);
+    }
+
 }
