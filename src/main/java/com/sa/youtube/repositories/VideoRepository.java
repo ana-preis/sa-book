@@ -32,4 +32,18 @@ public interface VideoRepository extends JpaRepository<Video, String> {
         nativeQuery = true
     )
     Long getViewCountByCategoryId(@Param("id") UUID id);
+
+    @Query(value = """
+        SELECT *
+        FROM VIDEO v INNER JOIN VIDEO_CATEGORY vc ON
+        v.id = vc.video_id
+        WHERE vc.category_id = :id
+        AND (
+            v.title LIKE %:text%
+            OR
+            v.description LIKE %:text%
+        )""",
+            nativeQuery = true
+    )
+    List<Video> getAllByNameInCategory(@Param("id") UUID id, @Param("text") String text);
 }
