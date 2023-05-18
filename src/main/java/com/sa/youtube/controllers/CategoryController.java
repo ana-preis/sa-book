@@ -34,7 +34,7 @@ public class CategoryController {
 
     @GetMapping("/list")
     public ResponseEntity<List<CategorySimpleDTO>> getList() {
-        return new ResponseEntity<List<CategorySimpleDTO>>(service.getCategoryList(), HttpStatus.OK);
+        return new ResponseEntity<>(service.getCategoryList(), HttpStatus.OK);
     }
 
 }
