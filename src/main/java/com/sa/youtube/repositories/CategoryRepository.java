@@ -29,4 +29,19 @@ public interface CategoryRepository extends JpaRepository<Category, UUID> {
     )
     Long getViewCount(@Param("id") UUID id);
 
+    @Query(value = """
+        SELECT *
+        FROM
+            CATEGORY c
+        INNER JOIN
+            VIDEO_CATEGORY vc
+        ON
+            c.id = vc.category_id
+        WHERE
+            c.id = :categoryId AND vc.video_id = :videoId
+        """,
+        nativeQuery = true
+    )
+    Optional<Category> checkCategoryFromIds(@Param("videoId") String videoId, @Param("categoryId") UUID categoryId);
+
 }
