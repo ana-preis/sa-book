@@ -97,7 +97,8 @@ public class ReviewService {
     @Transactional
     public void updateVideoCategory(Video video, UUID categoryId) {
         Category category = categoryRepository.findById(categoryId).orElseThrow();
-        if (video.addCategory(category)) {
+        if (categoryRepository.checkCategoryFromIds(video.getId(), categoryId).isEmpty()) {
+            video.addCategory(category);
             videoRepository.save(video);
             Long viewCount = videoRepository.getViewCountByCategoryId(category.getId());
             category.setViewCount(viewCount);
