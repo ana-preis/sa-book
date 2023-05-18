@@ -29,7 +29,10 @@ public class CategoryService {
         return new CategoryDTO(category, videoDTOList);
     }
 
-    public List<Category> getByName(String text) {
+    public List<Category> search(String text) {
+        if(text.isEmpty()) {
+            return categoryRepository.findAll();
+        }
         return categoryRepository.findByNameContaining(text);
     }
 
