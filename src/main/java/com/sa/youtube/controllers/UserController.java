@@ -1,6 +1,7 @@
 package com.sa.youtube.controllers;
 
 import com.sa.youtube.dtos.UserOutDTO;
+import com.sa.youtube.dtos.UserPasswordUpdateDTO;
 import com.sa.youtube.dtos.UserInDTO;
 import com.sa.youtube.services.UserService;
 
@@ -53,6 +54,11 @@ public class UserController {
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+
+    @PatchMapping("/{userId}/password")
+    public ResponseEntity<?> updatePassword(@RequestBody @Valid UserPasswordUpdateDTO dto, @PathVariable UUID userId) {
+        return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping("/{userID}")
