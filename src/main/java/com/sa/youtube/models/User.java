@@ -30,7 +30,7 @@ public class User implements UserDetails {
     private UUID id;
 
     @Column(nullable = false, unique = true)
-    private String username;
+    private String name;
 
     @Column(nullable = false, unique = true)
     private String email;
@@ -67,9 +67,15 @@ public class User implements UserDetails {
 
 
     public User(UserInDTO dto) {
-        this.username = dto.username();
+        this.name = dto.username();
         this.email = dto.email();
         this.password = dto.password();
+    }
+
+
+    @Override
+    public String getUsername() {
+        return email;
     }
 
 

@@ -16,7 +16,7 @@ public record UserOutDTO(
         public UserOutDTO(User user) {
             this(
                 user.getId(),
-                user.getUsername(),
+                user.getName(),
                 user.getEmail()
             );
         }
