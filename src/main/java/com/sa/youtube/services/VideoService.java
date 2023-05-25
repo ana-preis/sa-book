@@ -31,7 +31,7 @@ public class VideoService {
         if (videoRepository.existsById(id)) {
             Video video = videoRepository.findById(id).orElseThrow();
             List<ReviewOutDTO> reviews = reviewRepository.getReviewDTOsByVideoId(id);
-            return new VideoOutDTO(video, reviews);
+            return new VideoOutDTO(video, reviews, null);
         }
         return new VideoOutDTO(youtubeClient.getVideoInDTO(id));
     }

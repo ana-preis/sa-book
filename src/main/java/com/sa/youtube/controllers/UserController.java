@@ -3,6 +3,7 @@ package com.sa.youtube.controllers;
 import com.sa.youtube.dtos.UserOutDTO;
 import com.sa.youtube.dtos.UserPasswordUpdateDTO;
 import com.sa.youtube.dtos.UserInDTO;
+import com.sa.youtube.dtos.UserNameUpdateDTO;
 import com.sa.youtube.services.UserService;
 
 import jakarta.validation.Valid;
@@ -47,18 +48,17 @@ public class UserController {
     }
 
     @PatchMapping("/{userID}")
-    public ResponseEntity<UserOutDTO> update(@RequestBody @Valid UserInDTO userForm, @PathVariable UUID userID) {
-        try {
-            UserOutDTO userDTO = service.updateUser(userForm, userID);
-            return new ResponseEntity<>(userDTO, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<UserOutDTO> update(@RequestBody @Valid UserNameUpdateDTO dto, @PathVariable UUID userID) {
+        UserOutDTO userDTO = service.updateUser(dto, userID);
+        return new ResponseEntity<UserOutDTO>(userDTO, HttpStatus.OK);
     }
 
     @PatchMapping("/{userId}/password")
     public ResponseEntity<?> updatePassword(@RequestBody @Valid UserPasswordUpdateDTO dto, @PathVariable UUID userId) {
-        return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+        if (service.updateUserPassword(dto, userId)) {
+            return new ResponseEntity<>(null, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
     }
 
     @DeleteMapping("/{userID}")

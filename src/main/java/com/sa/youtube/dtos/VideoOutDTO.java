@@ -19,11 +19,12 @@ public record VideoOutDTO(
     Long viewCount,
     Long reviewCount,
     Double averageRating,
-    List<ReviewOutDTO> reviews
+    List<ReviewOutDTO> reviews,
+    List<CategorySimpleDTO> categories
 
 ) {
 
-    public VideoOutDTO(Video video, List<ReviewOutDTO> reviews) {
+    public VideoOutDTO(Video video, List<ReviewOutDTO> reviews, List<CategorySimpleDTO> categories) {
         this(
             video.getId(),
             video.getTitle(),
@@ -36,7 +37,8 @@ public record VideoOutDTO(
             video.getViewCount(),
             video.getReviewCount(),
             video.getAverageRating(),
-            reviews
+            reviews,
+            null
         );
     }
 
@@ -53,6 +55,7 @@ public record VideoOutDTO(
             video.getViewCount(),
             video.getReviewCount(),
             video.getAverageRating(),
+            null,
             null
         );
     }
@@ -70,6 +73,7 @@ public record VideoOutDTO(
             dto.viewCount(),
             null,
             null,
+            null,
             null
         );
     }
@@ -83,6 +87,7 @@ public record VideoOutDTO(
             res.getSnippet().getDescription(),
             res.getSnippet().getPublishedAt().getValue(),
             res.getSnippet().getChannelTitle(),
+            null,
             null,
             null,
             null,
