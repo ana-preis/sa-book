@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.sa.youtube.dtos.UserOutDTO;
 import com.sa.youtube.dtos.UserPasswordUpdateDTO;
 import com.sa.youtube.dtos.UserInDTO;
+import com.sa.youtube.dtos.UserNameUpdateDTO;
 import com.sa.youtube.models.User;
 import com.sa.youtube.repositories.UserRepository;
 
@@ -43,19 +44,21 @@ public class UserService {
     }
 
     @Transactional
-    public UserOutDTO updateUser(UserInDTO dto, UUID id) {
+    public UserOutDTO updateUser(UserNameUpdateDTO dto, UUID id) {
         User user = repository.findById(id).orElseThrow();
-        if (dto.username() != null) {
-            user.setName(dto.username());
-        }
-        if (dto.password() != null) {
-            user.setPassword(encoder.encode(dto.password()));
-        }
+        user.setName(dto.username());
         return new UserOutDTO(repository.save(user));
     }
 
-    public Boolean updateUserPassword(UserPasswordUpdateDTO dto, UUID userId) {
-        return true;
+    @Transactional
+    public Boolean updateUserPassword(UserPasswordUpdateDTO dto, UUID id) {
+        User user = repository.findById(id).orElseThrow();
+        if (encoder.matches(dto.oldPassword(), user.getPassword())) {
+            user.setPassword(encoder.encode(dto.newPassword()));
+            repository.save(user);
+            return true;
+        }
+        return false;
     }
 
     @Transactional
