@@ -16,14 +16,14 @@ import com.sa.youtube.models.User;
 @Service
 public class TokenService {
 
-    @Value("{api.security.token.secret}")
+    @Value("${api.security.token.secret}")
     private String SECRET;
 
-    @Value("{api.security.token.issuer}")
+    @Value("${api.security.token.issuer}")
     private String ISSUER;
 
-    @Value("{api.security.token.expiration_min}")
-    private Long EXPIRATION_MIN;
+    @Value("${api.security.token.expiration.min}")
+    private String EXPIRATION_MIN;
 
     public String generateToken(User user) {
         try {
@@ -42,7 +42,7 @@ public class TokenService {
     private Instant expirationDate() {
         return LocalDateTime
             .now()
-            .plusMinutes(EXPIRATION_MIN)
+            .plusMinutes(Integer.parseInt(EXPIRATION_MIN))
             .toInstant(ZoneOffset.of("-03:00"));
     }
 

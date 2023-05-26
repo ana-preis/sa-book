@@ -40,15 +40,19 @@ public class SecurityConfigurations {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
             .cors(Customizer.withDefaults())
+            .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> {
+                auth.requestMatchers(HttpMethod.GET, "/v3/*","/v3/api-docs/*", "/swagger-ui.html","/swagger-ui/*").permitAll();
                 auth.requestMatchers(HttpMethod.POST, "/login").permitAll();
+                auth.requestMatchers(HttpMethod.POST, "/users").permitAll();
+                auth.requestMatchers(HttpMethod.GET, "/categories").permitAll();
+                auth.requestMatchers(HttpMethod.GET, "/search").permitAll();
                 auth.anyRequest().authenticated();
             })
-            .csrf(csrf -> csrf.disable())
             .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
-                .exceptionHandling()
-                .authenticationEntryPoint(authEntryPoint)
-                .and()
+            .exceptionHandling((exceptionHandling) ->
+                exceptionHandling.authenticationEntryPoint(authEntryPoint)
+            )
             .sessionManagement(session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
