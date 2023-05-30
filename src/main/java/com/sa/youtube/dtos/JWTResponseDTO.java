@@ -1,3 +1,28 @@
 package com.sa.youtube.dtos;
 
-public record JWTResponseDTO(String token) {}
+import com.sa.youtube.models.Token;
+
+import jakarta.validation.constraints.NotBlank;
+
+public record JWTResponseDTO(
+
+    @NotBlank
+    String accessToken,
+
+    @NotBlank
+    String refreshToken,
+
+    @NotBlank
+    String email
+
+) {
+
+    public JWTResponseDTO(Token token) {
+        this(
+            token.getAccessToken(),
+            token.getRefreshToken(),
+            token.getUser().getEmail()
+        );
+    }
+
+}

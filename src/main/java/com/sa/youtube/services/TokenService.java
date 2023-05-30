@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +13,8 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.sa.youtube.models.User;
+import com.sa.youtube.repositories.TokenRepository;
+import com.sa.youtube.repositories.UserRepository;
 
 @Service
 public class TokenService {
@@ -22,10 +25,19 @@ public class TokenService {
     @Value("${api.security.token.issuer}")
     private String ISSUER;
 
-    @Value("${api.security.token.expiration.min}")
-    private String EXPIRATION_MIN;
+    @Value("${api.security.token.access.expiration.min}")
+    private String EXPIRATION_ACCESS;
 
-    public String generateToken(User user) {
+    @Value("${api.security.token.refresh.expiration.h}")
+    private String EXPIRATION_REFRESH;
+
+    @Autowired
+    private TokenRepository tokenRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    public String generateAccessToken(User user) {
         try {
             Algorithm alg = Algorithm.HMAC256(SECRET);
             return JWT
@@ -42,7 +54,7 @@ public class TokenService {
     private Instant expirationDate() {
         return LocalDateTime
             .now()
-            .plusMinutes(Integer.parseInt(EXPIRATION_MIN))
+            .plusMinutes(Integer.parseInt(EXPIRATION_ACCESS))
             .toInstant(ZoneOffset.of("-03:00"));
     }
 

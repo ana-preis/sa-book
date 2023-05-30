@@ -27,13 +27,14 @@ public class AuthenticationController {
     @Autowired
     private TokenService service;
 
+    /*
     @PostMapping("/login")
     public ResponseEntity<JWTResponseDTO> login(@RequestBody @Valid JWTRequestDTO data) {
         Authentication auth = manager.authenticate(
             new UsernamePasswordAuthenticationToken(data.email(), data.password())
         );
         String token = service.generateToken((User) auth.getPrincipal());
-        return new ResponseEntity<JWTResponseDTO>(new JWTResponseDTO(token), HttpStatus.CREATED);
+        return new ResponseEntity<JWTResponseDTO>(new JWTResponseDTO(), HttpStatus.CREATED);
     }
-
+    */
 }

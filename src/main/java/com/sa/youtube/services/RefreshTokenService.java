@@ -7,35 +7,39 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.sa.youtube.models.TokenUpdate;
+import com.sa.youtube.models.Token;
 import com.sa.youtube.models.User;
-import com.sa.youtube.repositories.TokenUpdateRepository;
+import com.sa.youtube.repositories.TokenRepository;
 import com.sa.youtube.repositories.UserRepository;
 
 
 @Service
-public class TokenUpdateService {
+public class RefreshTokenService {
 
     @Value("${api.security.token.update.expiration.h}")
     private String EXPIRATION_H;
 
     @Autowired
-    private TokenUpdateRepository tokenUpdateRepository;
+    private TokenRepository refreshTokenRepository;
 
     @Autowired
     private UserRepository userRepository;
 
-    public TokenUpdate generateUpdateToken(UUID id, String accessToken) {
+    public Token generateRefreshToken(UUID id, String accessToken) {
         User user = userRepository.findById(id).orElseThrow();
-        return tokenUpdateRepository.save(
-            new TokenUpdate(
+        return refreshTokenRepository.save(
+            new Token(
                 UUID.randomUUID(),
-                accessToken,
-                UUID.randomUUID().toString(),
                 getExpirationDate(),
-                user
+                user,
+                accessToken,
+                UUID.randomUUID().toString()
             )
         );
+    }
+
+    public Token getByRefreshToken(String refreshToken) {
+        return refreshTokenRepository.findByRefreshToken(refreshToken).orElseThrow();
     }
 
     private LocalDateTime getExpirationDate() {
@@ -44,12 +48,17 @@ public class TokenUpdateService {
             .plusHours(Integer.parseInt(EXPIRATION_H));
     }
 
-    public Boolean checkTokenUpdate(String refreshToken) {
-        return tokenUpdateRepository
+    public Boolean checkRefreshTokenExpiration(String refreshToken) {
+        return refreshTokenRepository
             .findByRefreshToken(refreshToken)
             .orElseThrow()
             .getExpirationDate()
             .isAfter(LocalDateTime.now());
+    }
+
+    public void deleteByUserId(UUID userId) {
+        User user = userRepository.findById(userId).orElseThrow();
+        refreshTokenRepository.deleteByUser(user);
     }
 
 }
