@@ -13,20 +13,21 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class TokenUpdate {
+public class Token {
 
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
-
-    @Column(unique = true)
-    private String accessToken;
-
-    @Column(unique = true)
-    private String refreshToken;
-
+    
+    @Column(nullable = false)
     private LocalDateTime expirationDate;
-
+    
     @OneToOne
     private User user;
+
+    @Column(nullable = false, unique = true)
+    private String accessToken;
+
+    @Column(nullable = false, unique = true)
+    private String refreshToken;
 
 }
