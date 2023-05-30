@@ -3,7 +3,10 @@ package com.sa.youtube.services;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.List;
+import java.util.UUID;
 
+import com.sa.youtube.models.Category;
+import com.sa.youtube.repositories.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,11 +30,16 @@ public class VideoService {
     @Autowired
     private VideoRepository videoRepository;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
     public VideoOutDTO getVideoById(String id) throws GeneralSecurityException, IOException, GoogleJsonResponseException {
         if (videoRepository.existsById(id)) {
             Video video = videoRepository.findById(id).orElseThrow();
             List<ReviewOutDTO> reviews = reviewRepository.getReviewDTOsByVideoId(id);
-            return new VideoOutDTO(video, reviews);
+            List<Category> categories = categoryRepository.findAllByVideoID(video.getId());
+            List<UUID> categoryIDList = categories.stream().map(Category::getId).toList();
+            return new VideoOutDTO(video, reviews, categoryIDList);
         }
         return new VideoOutDTO(youtubeClient.getVideoInDTO(id));
     }
