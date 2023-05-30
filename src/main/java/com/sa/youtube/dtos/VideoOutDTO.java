@@ -26,6 +26,7 @@ public record VideoOutDTO(
 ) {
 
     public VideoOutDTO(Video video, List<ReviewOutDTO> reviews, List<CategorySimpleDTO> categories) {
+
         this(
             video.getId(),
             video.getTitle(),
@@ -39,7 +40,7 @@ public record VideoOutDTO(
             video.getReviewCount(),
             video.getAverageRating(),
             reviews,
-            null
+            categories
         );
     }
 
