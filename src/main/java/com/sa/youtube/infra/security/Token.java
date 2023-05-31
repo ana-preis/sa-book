@@ -1,7 +1,9 @@
-package com.sa.youtube.models;
+package com.sa.youtube.infra.security;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.UUID;
+
+import com.sa.youtube.models.User;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -19,7 +21,7 @@ public class Token {
     private UUID id;
     
     @Column(nullable = false)
-    private LocalDateTime expirationDate;
+    private Instant expiresAt;
     
     @OneToOne
     private User user;
