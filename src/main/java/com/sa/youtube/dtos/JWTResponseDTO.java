@@ -1,6 +1,6 @@
 package com.sa.youtube.dtos;
 
-import com.sa.youtube.models.Token;
+import com.sa.youtube.infra.security.Token;
 
 import jakarta.validation.constraints.NotBlank;
 

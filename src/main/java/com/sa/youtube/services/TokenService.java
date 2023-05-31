@@ -3,6 +3,7 @@ package com.sa.youtube.services;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,6 +13,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.sa.youtube.infra.security.Token;
 import com.sa.youtube.models.User;
 import com.sa.youtube.repositories.TokenRepository;
 import com.sa.youtube.repositories.UserRepository;
@@ -25,10 +27,10 @@ public class TokenService {
     @Value("${api.security.token.issuer}")
     private String ISSUER;
 
-    @Value("${api.security.token.access.expiration.min}")
+    @Value("${api.security.token.expiration.access.min}")
     private String EXPIRATION_ACCESS;
 
-    @Value("${api.security.token.refresh.expiration.h}")
+    @Value("${api.security.token.expiration.refresh.min}")
     private String EXPIRATION_REFRESH;
 
     @Autowired
@@ -44,32 +46,62 @@ public class TokenService {
                 .create()
                 .withIssuer(ISSUER)
                 .withSubject(user.getUsername())
-                .withExpiresAt(expirationDate())
+                .withExpiresAt(getExpirationInstant(EXPIRATION_ACCESS))
                 .sign(alg);
         } catch (JWTCreationException e) {
             throw new RuntimeException("Token generation error!", e);
         }
     }
-
-    private Instant expirationDate() {
-        return LocalDateTime
-            .now()
-            .plusMinutes(Integer.parseInt(EXPIRATION_ACCESS))
-            .toInstant(ZoneOffset.of("-03:00"));
-    }
-
+    
     public String getSubject(String tokenJWT) {
         try {
             Algorithm alg = Algorithm.HMAC256(SECRET);
             return JWT
-                .require(alg)
-                .withIssuer(ISSUER)
-                .build()
-                .verify(tokenJWT)
-                .getSubject();
+            .require(alg)
+            .withIssuer(ISSUER)
+            .build()
+            .verify(tokenJWT)
+            .getSubject();
         } catch (JWTVerificationException e) {
             throw new RuntimeException("Token is expired or not valid!", e);
         }
+    }
+
+    private Instant getExpirationInstant(String expiration) {
+        return LocalDateTime
+            .now()
+            .plusMinutes(Integer.parseInt(expiration))
+            .toInstant(ZoneOffset.of("-03:00"));
+    }
+
+    public Boolean isNotExpired(String refreshToken) {
+        return tokenRepository
+            .findByRefreshToken(refreshToken)
+            .orElseThrow()
+            .getExpiresAt()
+            .isAfter(LocalDateTime.now().toInstant(ZoneOffset.of("-03:00")));
+    }
+
+    public Token createToken(UUID userId) {
+        User user = userRepository.findById(userId).orElseThrow();
+        return tokenRepository.save(
+            new Token(
+                UUID.randomUUID(),
+                getExpirationInstant(EXPIRATION_REFRESH),
+                user,
+                generateAccessToken(user),
+                UUID.randomUUID().toString()
+            )
+        );
+    }
+
+    public Token getByRefreshToken(String refreshToken) {
+        return tokenRepository.findByRefreshToken(refreshToken).orElseThrow();
+    }
+
+    public void deleteByUserId(UUID userId) {
+        User user = userRepository.findById(userId).orElseThrow();
+        tokenRepository.deleteByUser(user);
     }
 
 }
