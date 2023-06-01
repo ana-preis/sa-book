@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sa.youtube.dtos.CategoryDTO;
+import com.sa.youtube.dtos.CategorySimpleDTO;
 import com.sa.youtube.dtos.VideoOutDTO;
 import com.sa.youtube.models.Category;
 import com.sa.youtube.repositories.CategoryRepository;
@@ -31,6 +32,14 @@ public class CategoryService {
 
     public List<Category> getByName(String text) {
         return categoryRepository.findByNameContaining(text);
+    }
+
+    public List<CategorySimpleDTO> getCategoryList() {
+        return categoryRepository
+            .findAll()
+            .stream()
+            .map(CategorySimpleDTO::new)
+            .toList();
     }
 
 }

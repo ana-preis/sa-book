@@ -1,4 +1,4 @@
-package com.sa.youtube.configuration;
+package com.sa.youtube.infra.security;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;

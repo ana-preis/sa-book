@@ -1,6 +1,7 @@
 package com.sa.youtube.controllers;
 
 import com.sa.youtube.dtos.CategoryDTO;
+import com.sa.youtube.dtos.CategorySimpleDTO;
 import com.sa.youtube.models.Category;
 import com.sa.youtube.services.CategoryService;
 
@@ -27,8 +28,12 @@ public class CategoryController {
 
     @GetMapping
     public ResponseEntity<List<Category>> search(@RequestParam(defaultValue = "") String text) {
-        List<Category> categoryList = service.getByName(text);
-        return new ResponseEntity<>(categoryList, HttpStatus.OK);
+        return new ResponseEntity<List<Category>>(service.getByName(text), HttpStatus.OK);
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<List<CategorySimpleDTO>> getList() {
+        return new ResponseEntity<List<CategorySimpleDTO>>(service.getCategoryList(), HttpStatus.OK);
     }
 
 }
