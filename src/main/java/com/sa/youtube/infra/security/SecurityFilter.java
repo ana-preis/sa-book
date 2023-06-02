@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.sa.youtube.repositories.TokenRepository;
 import com.sa.youtube.repositories.UserRepository;
 import com.sa.youtube.services.TokenService;
 
@@ -22,10 +23,13 @@ import jakarta.servlet.http.HttpServletResponse;
 public class SecurityFilter extends OncePerRequestFilter {
     
     @Autowired
-    private TokenService service;
+    private TokenService tokenService;
 
     @Autowired
-    private UserRepository repository;
+    private TokenRepository tokenRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     protected void doFilterInternal(
@@ -33,15 +37,17 @@ public class SecurityFilter extends OncePerRequestFilter {
         HttpServletResponse response,
         FilterChain filterChain
     ) throws IOException, ServletException {
-        String tokenJWT = retrieveToken(request);
-        if (tokenJWT != null) {
-            String subject = service.getSubject(tokenJWT);
-            UserDetails user = repository.findByEmail(subject).orElseThrow();
+        
+        String accessToken = retrieveToken(request);
+        if (accessToken != null) {
+            Token token = tokenRepository.findByAccessToken(accessToken).orElseThrow();
+            String subject = tokenService.getSubject(accessToken);
+            //UserDetails user = userRepository.findByEmail(subject).orElseThrow();
             SecurityContextHolder.getContext().setAuthentication(
                 new UsernamePasswordAuthenticationToken(
-                    user,
+                    token.getUser(),
                     null,
-                    user.getAuthorities()
+                    token.getUser().getAuthorities()
                 )
             );
         }
