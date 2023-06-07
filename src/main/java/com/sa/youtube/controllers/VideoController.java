@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.List;
+import java.util.UUID;
 
 // id exemplo "6EI1K4qP8YI"
 
@@ -46,6 +47,13 @@ public class VideoController {
     @GetMapping
     public ResponseEntity<List<Video>> searchVideos(@RequestParam(defaultValue = "") String text) {
         List<Video> videoList = repository.findAllByTitleContainingIgnoreCase(text);
+        return new ResponseEntity<>(videoList, HttpStatus.OK);
+    }
+
+    @GetMapping("/category/{id}")
+    public ResponseEntity<List<Video>> searchVideosInCategory(@RequestParam(defaultValue = "") String text,
+                                                              @PathVariable String id) {
+        List<Video> videoList = repository.getAllByNameInCategory(UUID.fromString(id), text);
         return new ResponseEntity<>(videoList, HttpStatus.OK);
     }
 }

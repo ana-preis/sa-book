@@ -27,7 +27,7 @@ public class CategoryController {
 
     @GetMapping
     public ResponseEntity<List<Category>> search(@RequestParam(defaultValue = "") String text) {
-        List<Category> categoryList = service.getByName(text);
+        List<Category> categoryList = service.search(text);
         return new ResponseEntity<>(categoryList, HttpStatus.OK);
     }
 

@@ -24,6 +24,7 @@ public class Category {
 
     private String name;
 
+    @Column(length = 2000)
     private String description;
 
     private Long viewCount;
