@@ -67,4 +67,10 @@ public class UserController {
         return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
     }
 
+    @PostMapping("/{userID}/categories/{categoryID}")
+    public ResponseEntity<UserOutDTO> saveCategoryToUser(@PathVariable UUID userID, @PathVariable UUID categoryID) {
+        UserOutDTO dto = service.saveCategoryToUser(userID, categoryID);
+        return new ResponseEntity<>(dto, HttpStatus.OK);
+    }
+
 }

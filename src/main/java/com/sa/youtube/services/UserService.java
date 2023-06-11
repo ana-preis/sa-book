@@ -1,7 +1,12 @@
 package com.sa.youtube.services;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
+import com.sa.youtube.models.Category;
+import com.sa.youtube.repositories.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +21,7 @@ import com.sa.youtube.models.User;
 import com.sa.youtube.repositories.UserRepository;
 
 import jakarta.transaction.Transactional;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 @Service
 public class UserService {
@@ -25,6 +31,10 @@ public class UserService {
 
     @Autowired
     private BCryptPasswordEncoder encoder;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
+
 
     @Transactional
     public UserOutDTO createUser(UserInDTO dto) {
@@ -64,5 +74,19 @@ public class UserService {
     @Transactional
     public void deleteUser(UUID id) {
         repository.deleteById(id);
+    }
+
+    @Transactional
+    public UserOutDTO saveCategoryToUser(UUID id, UUID categoryID) {
+        User user = repository.findById(id).orElseThrow();
+        Category category = categoryRepository.findById(categoryID).orElseThrow();
+        if (user.getSubscriptions().contains(category)) {
+            throw new RuntimeException();
+        }
+        Set<Category> subscriptions = new HashSet<>();
+        subscriptions.add(category);
+        user.setSubscriptions(subscriptions);
+        User saved = repository.save(user);
+        return new UserOutDTO(saved);
     }
 }
