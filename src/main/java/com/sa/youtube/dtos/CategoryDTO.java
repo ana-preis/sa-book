@@ -22,7 +22,7 @@ public record CategoryDTO(
                 category.getId(),
                 category.getName(),
                 category.getDescription(),
-                null,//category.getUserList().size(),
+                category.getUserList().size(),
                 videoList.size(),
                 category.getViewCount(),
                 videoList,
@@ -39,8 +39,10 @@ public record CategoryDTO(
                 null,
                 null,
                 null,
-                null
+                category.getUserList().stream().map(User::getId).toList()
         );
     }
+
+
 
 }

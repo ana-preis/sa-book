@@ -27,9 +27,9 @@ public class CategoryController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Category>> search(@RequestParam(defaultValue = "") String text) {
-        List<Category> categoryList = service.search(text);
-        return new ResponseEntity<>(categoryList, HttpStatus.OK);
+    public ResponseEntity<List<CategoryDTO>> search(@RequestParam(defaultValue = "") String text) {
+        List<CategoryDTO> dto = service.search(text);
+        return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
     @GetMapping("/list")

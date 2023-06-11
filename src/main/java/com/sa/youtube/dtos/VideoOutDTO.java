@@ -21,7 +21,7 @@ public record VideoOutDTO(
     Long reviewCount,
     Double averageRating,
     List<ReviewOutDTO> reviews,
-    List<UUID> categoryIDList
+    List<CategorySimpleDTO> categoryIDList
 
 ) {
 

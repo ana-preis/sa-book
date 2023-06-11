@@ -1,8 +1,11 @@
 package com.sa.youtube.services;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
+import com.sa.youtube.models.Video;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,16 +28,15 @@ public class CategoryService {
 
     public CategoryDTO getById(UUID id) {
         Category category = categoryRepository.findById(id).orElseThrow();
-        List<VideoOutDTO> videoDTOList = videoRepository.getVideoListByCategoryId(id)
-            .stream().map(VideoOutDTO::new).toList();
-        return new CategoryDTO(category, videoDTOList);
+        return populateWithVideo(category);
     }
 
-    public List<Category> search(String text) {
+    public List<CategoryDTO> search(String text) {
         if(text.isEmpty()) {
-            return categoryRepository.findAll();
+            List<Category> categories = categoryRepository.findAll();
+            return ToCategoryDTOList(categories);
         }
-        return categoryRepository.findByNameContaining(text);
+        return ToCategoryDTOList(categoryRepository.findByNameContaining(text));
     }
 
     public List<CategorySimpleDTO> getCategoryList() {
@@ -43,6 +45,17 @@ public class CategoryService {
             .stream()
             .map(CategorySimpleDTO::new)
             .toList();
+    }
+
+    public CategoryDTO populateWithVideo(Category category) {
+        Optional<Set<Video>> videoListOpt =  videoRepository.getVideoListByCategoryId(category.getId());
+        if(videoListOpt.isEmpty() || videoListOpt.get().isEmpty()) return new CategoryDTO(category);
+        List<VideoOutDTO> videoDTOList = videoListOpt.get().stream().map(VideoOutDTO::new).toList();
+        return new CategoryDTO(category, videoDTOList);
+    }
+
+    public List<CategoryDTO> ToCategoryDTOList(List<Category> categories) {
+        return categories.stream().map(this::populateWithVideo).toList();
     }
 
 }
