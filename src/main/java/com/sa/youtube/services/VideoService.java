@@ -5,6 +5,7 @@ import java.security.GeneralSecurityException;
 import java.util.List;
 import java.util.UUID;
 
+import com.sa.youtube.dtos.CategorySimpleDTO;
 import com.sa.youtube.models.Category;
 import com.sa.youtube.repositories.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,8 +39,8 @@ public class VideoService {
             Video video = videoRepository.findById(id).orElseThrow();
             List<ReviewOutDTO> reviews = reviewRepository.getReviewDTOsByVideoId(id);
             List<Category> categories = categoryRepository.findAllByVideoID(video.getId());
-            List<UUID> categoryIDList = categories.stream().map(Category::getId).toList();
-            return new VideoOutDTO(video, reviews, categoryIDList);
+            List<CategorySimpleDTO> simpleCategory = categories.stream().map(CategorySimpleDTO::new).toList();
+            return new VideoOutDTO(video, reviews, simpleCategory);
         }
         return new VideoOutDTO(youtubeClient.getVideoInDTO(id));
     }

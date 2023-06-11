@@ -1,9 +1,6 @@
 package com.sa.youtube.services;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 import com.sa.youtube.models.Category;
 import com.sa.youtube.repositories.CategoryRepository;
@@ -80,13 +77,30 @@ public class UserService {
     public UserOutDTO saveCategoryToUser(UUID id, UUID categoryID) {
         User user = repository.findById(id).orElseThrow();
         Category category = categoryRepository.findById(categoryID).orElseThrow();
-        if (user.getSubscriptions().contains(category)) {
-            throw new RuntimeException();
-        }
+        if (user.getSubscriptions().contains(category)) throw new RuntimeException();
         Set<Category> subscriptions = new HashSet<>();
         subscriptions.add(category);
         user.setSubscriptions(subscriptions);
         User saved = repository.save(user);
         return new UserOutDTO(saved);
     }
+
+    @Transactional
+    public UserOutDTO deleteCategoryToUser(UUID id, UUID categoryID) {
+        User user = repository.findById(id).orElseThrow();
+        Category category = categoryRepository.findById(categoryID).orElseThrow();
+
+        Set<Category> newCategories = user.getSubscriptions();
+        newCategories.remove(category);
+        user.setSubscriptions(newCategories);
+        User saved = repository.save(user);
+
+        List<User> newUserList = category.getUserList();
+        newUserList.remove(user);
+        category.setUserList(newUserList);
+        categoryRepository.save(category);
+
+        return new UserOutDTO(saved);
+    }
+
 }

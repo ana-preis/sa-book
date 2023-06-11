@@ -73,4 +73,10 @@ public class UserController {
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
+    @DeleteMapping("/{userID}/categories/{categoryID}")
+    public ResponseEntity<UserOutDTO> deleteCategoryToUser(@PathVariable UUID userID, @PathVariable UUID categoryID) {
+        UserOutDTO dto = service.deleteCategoryToUser(userID, categoryID);
+        return new ResponseEntity<>(dto, HttpStatus.OK);
+    }
+
 }
