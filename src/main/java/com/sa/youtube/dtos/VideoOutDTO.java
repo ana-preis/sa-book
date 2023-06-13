@@ -21,11 +21,12 @@ public record VideoOutDTO(
     Long reviewCount,
     Double averageRating,
     List<ReviewOutDTO> reviews,
-    List<UUID> categoryIDList
+    List<CategorySimpleDTO> categoryIDList
 
 ) {
 
-    public VideoOutDTO(Video video, List<ReviewOutDTO> reviews, List<UUID> categoryIDList) {
+    public VideoOutDTO(Video video, List<ReviewOutDTO> reviews, List<CategorySimpleDTO> categories) {
+
         this(
             video.getId(),
             video.getTitle(),
@@ -39,7 +40,7 @@ public record VideoOutDTO(
             video.getReviewCount(),
             video.getAverageRating(),
             reviews,
-            categoryIDList
+            categories
         );
     }
 

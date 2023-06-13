@@ -1,8 +1,12 @@
 package com.sa.youtube.controllers;
 
 import com.sa.youtube.dtos.UserOutDTO;
+import com.sa.youtube.dtos.UserPasswordUpdateDTO;
 import com.sa.youtube.dtos.UserInDTO;
+import com.sa.youtube.dtos.UserNameUpdateDTO;
 import com.sa.youtube.services.UserService;
+
+import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -11,7 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.UUID;
 
 
@@ -45,19 +48,35 @@ public class UserController {
     }
 
     @PatchMapping("/{userID}")
-    public ResponseEntity<UserOutDTO> update(@RequestBody @Valid UserInDTO userForm, @PathVariable UUID userID) {
-        try {
-            UserOutDTO userDTO = service.updateUser(userForm, userID);
-            return new ResponseEntity<>(userDTO, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<UserOutDTO> update(@RequestBody @Valid UserNameUpdateDTO dto, @PathVariable UUID userID) {
+        UserOutDTO userDTO = service.updateUser(dto, userID);
+        return new ResponseEntity<UserOutDTO>(userDTO, HttpStatus.OK);
+    }
+
+    @PatchMapping("/{userId}/password")
+    public ResponseEntity<?> updatePassword(@RequestBody @Valid UserPasswordUpdateDTO dto, @PathVariable UUID userId) {
+        if (service.updateUserPassword(dto, userId)) {
+            return new ResponseEntity<>(null, HttpStatus.OK);
         }
+        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
     }
 
     @DeleteMapping("/{userID}")
     public ResponseEntity<?> delete(@PathVariable UUID userID) {
         service.deleteUser(userID);
         return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+    }
+
+    @PostMapping("/{userID}/categories/{categoryID}")
+    public ResponseEntity<UserOutDTO> saveCategoryToUser(@PathVariable UUID userID, @PathVariable UUID categoryID) {
+        UserOutDTO dto = service.saveCategoryToUser(userID, categoryID);
+        return new ResponseEntity<>(dto, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{userID}/categories/{categoryID}")
+    public ResponseEntity<UserOutDTO> deleteCategoryToUser(@PathVariable UUID userID, @PathVariable UUID categoryID) {
+        UserOutDTO dto = service.deleteCategoryToUser(userID, categoryID);
+        return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
 }

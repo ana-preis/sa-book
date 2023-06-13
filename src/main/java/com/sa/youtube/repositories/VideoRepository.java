@@ -22,7 +22,7 @@ public interface VideoRepository extends JpaRepository<Video, String> {
         WHERE vc.category_id = :id""",
         nativeQuery = true
     )
-    Set<Video> getVideoListByCategoryId(@Param("id") UUID id);
+    Optional<Set<Video>> getVideoListByCategoryId(@Param("id") UUID id);
 
     @Query(value = """
         SELECT SUM(v.view_count)
