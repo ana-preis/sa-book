@@ -22,7 +22,7 @@ public class CategoryController {
     @GetMapping("/{categoryID}")
     public ResponseEntity<CategoryDTO> getByID(@PathVariable UUID categoryID) {
         CategoryDTO categoryDTO = service.getById(categoryID);
-        return new ResponseEntity<CategoryDTO>(categoryDTO, HttpStatus.OK);
+        return new ResponseEntity<>(categoryDTO, HttpStatus.OK);
     }
 
     @GetMapping

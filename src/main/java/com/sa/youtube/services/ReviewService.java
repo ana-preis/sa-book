@@ -53,8 +53,7 @@ public class ReviewService {
         Video video = videoRepository.existsById(dto.videoId()) ?
             videoRepository.findById(dto.videoId()).orElseThrow() :
             createVideo(dto.videoId());
-
-        dto.categoryIdList().forEach(id -> updateVideoCategory(video, id));
+        if(dto.categoryIdList().size() > 0) dto.categoryIdList().forEach(id -> updateVideoCategory(video, id));
 
         Review review = reviewRepository.save(new Review(dto, user, video));
         updateVideoReviews(video);

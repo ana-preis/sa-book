@@ -1,6 +1,7 @@
 package com.sa.youtube.dtos;
 
 import java.util.List;
+import java.util.UUID;
 
 import com.google.api.services.youtube.model.SearchResult;
 import com.sa.youtube.models.Video;
@@ -19,11 +20,12 @@ public record VideoOutDTO(
     Long viewCount,
     Long reviewCount,
     Double averageRating,
-    List<ReviewOutDTO> reviews
+    List<ReviewOutDTO> reviews,
+    List<UUID> categoryIDList
 
 ) {
 
-    public VideoOutDTO(Video video, List<ReviewOutDTO> reviews) {
+    public VideoOutDTO(Video video, List<ReviewOutDTO> reviews, List<UUID> categoryIDList) {
         this(
             video.getId(),
             video.getTitle(),
@@ -36,7 +38,8 @@ public record VideoOutDTO(
             video.getViewCount(),
             video.getReviewCount(),
             video.getAverageRating(),
-            reviews
+            reviews,
+            categoryIDList
         );
     }
 
@@ -53,6 +56,7 @@ public record VideoOutDTO(
             video.getViewCount(),
             video.getReviewCount(),
             video.getAverageRating(),
+            null,
             null
         );
     }
@@ -70,6 +74,7 @@ public record VideoOutDTO(
             dto.viewCount(),
             null,
             null,
+            null,
             null
         );
     }
@@ -83,6 +88,7 @@ public record VideoOutDTO(
             res.getSnippet().getDescription(),
             res.getSnippet().getPublishedAt().getValue(),
             res.getSnippet().getChannelTitle(),
+            null,
             null,
             null,
             null,

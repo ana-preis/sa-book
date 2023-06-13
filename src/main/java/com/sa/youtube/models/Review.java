@@ -29,6 +29,7 @@ public class Review{
     private Video video;
 
     private Integer rating;
+    @Column(length = 2000)
     private String text;
     private DateTime publishedAt;
 
