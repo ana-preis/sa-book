@@ -7,6 +7,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.sa.youtube.dtos.JWTRequestDTO;
 import com.sa.youtube.dtos.JWTResponseDTO;
 import com.sa.youtube.dtos.RefreshTokenDTO;
+import com.sa.youtube.dtos.UserOutDTO;
 import com.sa.youtube.models.User;
 import com.sa.youtube.services.TokenService;
 
@@ -28,6 +30,12 @@ public class AuthenticationController {
 
     @Autowired
     private TokenService service;
+
+    @GetMapping("/me")
+    public ResponseEntity<UserOutDTO> getMyself(Authentication authentication) {
+        UserOutDTO dto = new UserOutDTO((User) authentication.getPrincipal());
+        return new ResponseEntity<UserOutDTO>(dto, HttpStatus.OK);
+    }
 
     @PostMapping("/login")
     public ResponseEntity<JWTResponseDTO> login(@RequestBody @Valid JWTRequestDTO data) {
