@@ -1,6 +1,5 @@
 package com.sa.youtube.dtos;
 
-import com.sa.youtube.models.Category;
 import com.sa.youtube.models.User;
 
 import java.util.List;
@@ -21,7 +20,16 @@ public record UserOutDTO(
                 user.getId(),
                 user.getName(),
                 user.getEmail(),
-                user.getSubscriptions().stream().map(Category::getId).toList()
+                null//user.getSubscriptions().stream().map(Category::getId).toList()
+            );
+        }
+
+        public UserOutDTO(User user, List<UUID> subs) {
+            this(
+                user.getId(),
+                user.getName(),
+                user.getEmail(),
+                subs
             );
         }
     }

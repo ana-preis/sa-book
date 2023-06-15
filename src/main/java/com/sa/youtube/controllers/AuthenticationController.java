@@ -17,8 +17,11 @@ import com.sa.youtube.dtos.JWTResponseDTO;
 import com.sa.youtube.dtos.RefreshTokenDTO;
 import com.sa.youtube.dtos.UserOutDTO;
 import com.sa.youtube.models.User;
+import com.sa.youtube.repositories.UserRepository;
 import com.sa.youtube.services.TokenService;
+import com.sa.youtube.services.UserService;
 
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 
 
@@ -31,9 +34,12 @@ public class AuthenticationController {
     @Autowired
     private TokenService service;
 
+    @Autowired
+    private UserService userService;
+
     @GetMapping("/me")
     public ResponseEntity<UserOutDTO> getMyself(Authentication authentication) {
-        UserOutDTO dto = new UserOutDTO((User) authentication.getPrincipal());
+        UserOutDTO dto = userService.getUserById(((User) authentication.getPrincipal()).getId());
         return new ResponseEntity<UserOutDTO>(dto, HttpStatus.OK);
     }
 
