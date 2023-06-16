@@ -18,7 +18,6 @@ import com.sa.youtube.models.User;
 import com.sa.youtube.repositories.UserRepository;
 
 import jakarta.transaction.Transactional;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 
 @Service
 public class UserService {
@@ -37,12 +36,17 @@ public class UserService {
     public UserOutDTO createUser(UserInDTO dto) {
         User user = new User(dto);
         user.setPassword(encoder.encode(dto.password()));
-        return new UserOutDTO(repository.save(user));
+        return getUserOutDTO(repository.save(user));
     }
 
     public UserOutDTO getUserById(UUID id) {
         User user = repository.findById(id).orElseThrow();
-        return new UserOutDTO(user);
+        return getUserOutDTO(user);
+    }
+
+    @Transactional
+    public UserOutDTO getUserOutDTO(User user) {
+        return new UserOutDTO(user, user.getSubscriptions().stream().map(Category::getId).toList());
     }
 
     public Page<UserOutDTO> getUsers(Pageable page) {
@@ -54,7 +58,7 @@ public class UserService {
     public UserOutDTO updateUser(UserNameUpdateDTO dto, UUID id) {
         User user = repository.findById(id).orElseThrow();
         user.setName(dto.username());
-        return new UserOutDTO(repository.save(user));
+        return getUserOutDTO(repository.save(user));
     }
 
     @Transactional
@@ -81,8 +85,7 @@ public class UserService {
         Set<Category> subscriptions = new HashSet<>();
         subscriptions.add(category);
         user.setSubscriptions(subscriptions);
-        User saved = repository.save(user);
-        return new UserOutDTO(saved);
+        return getUserOutDTO(repository.save(user));
     }
 
     @Transactional
@@ -100,7 +103,7 @@ public class UserService {
         category.setUserList(newUserList);
         categoryRepository.save(category);
 
-        return new UserOutDTO(saved);
+        return getUserOutDTO(saved);
     }
 
 }

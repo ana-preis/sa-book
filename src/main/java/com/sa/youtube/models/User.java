@@ -1,6 +1,7 @@
 package com.sa.youtube.models;
 
 import com.sa.youtube.dtos.UserInDTO;
+import com.sa.youtube.infra.security.Role;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -65,6 +66,9 @@ public class User implements UserDetails {
     )
     private Set<Video> finishedList = new HashSet<>();
 
+    @Enumerated
+    private Role role = Role.ROLE_USER;
+
 
     public User(UserInDTO dto) {
         this.name = dto.username();
@@ -81,7 +85,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        return List.of(new SimpleGrantedAuthority(role.toString()));
     }
 
 
