@@ -22,10 +22,16 @@ public class ControllerExceptionHandler {
         return ResponseEntity.notFound().build();
     }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<?> error400Handler(MethodArgumentNotValidException e) {
+    @ExceptionHandler({MethodArgumentNotValidException.class})
+    public ResponseEntity<?> error400HandlerList(MethodArgumentNotValidException e) {
         List<ErrorDTO> errList = e.getFieldErrors().stream().map(ErrorDTO::new).toList();
         return ResponseEntity.badRequest().body(errList);
+    }
+
+    @ExceptionHandler({IllegalArgumentException.class})
+    public ResponseEntity<?> error400Handler(IllegalArgumentException e) {
+        ErrorDTO dtoError = new ErrorDTO(e);
+        return ResponseEntity.badRequest().body(dtoError);
     }
 
     @ExceptionHandler({GeneralSecurityException.class, IOException.class, GoogleJsonResponseException.class})

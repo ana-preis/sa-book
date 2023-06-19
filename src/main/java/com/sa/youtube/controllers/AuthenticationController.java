@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,10 +38,12 @@ public class AuthenticationController {
     @Autowired
     private UserService userService;
 
+    @Transactional
     @GetMapping("/me")
     public ResponseEntity<UserOutDTO> getMyself(Authentication authentication) {
-        UserOutDTO dto = userService.getUserById(((User) authentication.getPrincipal()).getId());
-        return new ResponseEntity<UserOutDTO>(dto, HttpStatus.OK);
+        User user = (User) authentication.getPrincipal();
+        UserOutDTO dto = userService.getUserById(user.getId());
+        return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
     @PostMapping("/login")
