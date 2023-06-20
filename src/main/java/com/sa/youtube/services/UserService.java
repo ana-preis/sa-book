@@ -2,6 +2,7 @@ package com.sa.youtube.services;
 
 import java.util.*;
 
+import com.sa.youtube.dtos.*;
 import com.sa.youtube.models.Category;
 import com.sa.youtube.repositories.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +12,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.sa.youtube.dtos.UserOutDTO;
-import com.sa.youtube.dtos.UserPasswordUpdateDTO;
-import com.sa.youtube.dtos.UserInDTO;
-import com.sa.youtube.dtos.UserNameUpdateDTO;
 import com.sa.youtube.models.User;
 import com.sa.youtube.repositories.UserRepository;
 
@@ -52,7 +49,9 @@ public class UserService {
 
     @Transactional
     public UserOutDTO getUserOutDTO(User user) {
-        return new UserOutDTO(user, user.getSubscriptions().stream().map(Category::getId).toList());
+        var subscriptions = user.getSubscriptions().stream().map(Category::getId).toList();
+        var reviews = user.getReviewList().stream().map(ReviewOutDTO::new).toList();
+        return new UserOutDTO(user, subscriptions, reviews);
     }
 
     public Page<UserOutDTO> getUsers(Pageable page) {
