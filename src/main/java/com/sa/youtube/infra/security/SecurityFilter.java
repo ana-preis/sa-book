@@ -42,10 +42,10 @@ public class SecurityFilter extends OncePerRequestFilter {
         if (accessToken != null) {
             Token token = tokenRepository.findByAccessToken(accessToken).orElseThrow();
             String subject = tokenService.getSubject(accessToken);
-            //UserDetails user = userRepository.findByEmail(subject).orElseThrow();
+            UserDetails user = userRepository.findByEmail(subject).orElseThrow();
             SecurityContextHolder.getContext().setAuthentication(
                 new UsernamePasswordAuthenticationToken(
-                    token.getUser(),
+                    user,
                     null,
                     token.getUser().getAuthorities()
                 )

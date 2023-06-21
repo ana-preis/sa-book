@@ -18,9 +18,9 @@ public interface CategoryRepository extends JpaRepository<Category, UUID> {
         SELECT
             SUM(v.view_count)
         FROM
-            VIDEO v
+            video v
         LEFT JOIN
-            VIDEO_CATEGORY c
+            video_category c
         ON
             v.id = c.video_id
         WHERE
@@ -32,9 +32,9 @@ public interface CategoryRepository extends JpaRepository<Category, UUID> {
     @Query(value = """
         SELECT *
         FROM
-            CATEGORY c
+            category c
         INNER JOIN
-            VIDEO_CATEGORY vc
+            video_category vc
         ON
             c.id = vc.category_id
         WHERE
@@ -47,9 +47,9 @@ public interface CategoryRepository extends JpaRepository<Category, UUID> {
     @Query(value = """
     SELECT *
     FROM 
-        CATEGORY c
+        category c
     INNER JOIN 
-        VIDEO_CATEGORY vc
+        video_category vc
     ON
         c.id = vc.category_id
     WHERE 

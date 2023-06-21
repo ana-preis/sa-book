@@ -85,6 +85,16 @@ public class ReviewService {
     }
 
     @Transactional
+    public ReviewOutDTO updateReview(ReviewInDTO dto) {
+        Review review = reviewRepository.findByUserIdVideoId(dto.userId(), dto.videoId());
+        review.setRating(dto.rating());
+        review.setText(dto.text());
+        Video video = videoRepository.findById(dto.videoId()).orElseThrow();
+        updateVideoReviews(video);
+        return new ReviewOutDTO(reviewRepository.save(review));
+    }
+
+    @Transactional
     public void updateVideoReviews(Video video) {
         Long reviewCount = reviewRepository.getReviewCount(video.getId());
         video.setReviewCount(reviewCount);

@@ -3,7 +3,6 @@ package com.sa.youtube.services;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.List;
-import java.util.UUID;
 
 import com.sa.youtube.dtos.CategorySimpleDTO;
 import com.sa.youtube.models.Category;

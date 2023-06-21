@@ -66,7 +66,7 @@ public class User implements UserDetails {
     )
     private Set<Video> finishedList = new HashSet<>();
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private Role role = Role.ROLE_USER;
 
 
@@ -74,6 +74,13 @@ public class User implements UserDetails {
         this.name = dto.username();
         this.email = dto.email();
         this.password = dto.password();
+    }
+
+    public User(String name, String email, String password) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.role = Role.ROLE_ADMIN;
     }
 
 

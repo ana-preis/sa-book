@@ -2,7 +2,6 @@ package com.sa.youtube.controllers;
 
 import com.sa.youtube.dtos.CategoryDTO;
 import com.sa.youtube.dtos.CategorySimpleDTO;
-import com.sa.youtube.models.Category;
 import com.sa.youtube.services.CategoryService;
 
 import org.springframework.beans.factory.annotation.Autowired;

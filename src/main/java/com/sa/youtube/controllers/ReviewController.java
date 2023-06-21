@@ -44,15 +44,13 @@ public class ReviewController {
         return new ResponseEntity<ReviewOutDTO>(review, HttpStatus.OK);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<ReviewOutDTO> update(@PathVariable UUID id) {
-        ReviewOutDTO dto = new ReviewOutDTO(null);
-        return new ResponseEntity<ReviewOutDTO>(dto, HttpStatus.OK);
+    @PutMapping
+    public ResponseEntity<ReviewOutDTO> update(@RequestBody @Valid ReviewInDTO dto) {
+        ReviewOutDTO reviewOutDTO = service.updateReview(dto);
+        return new ResponseEntity<ReviewOutDTO>(reviewOutDTO, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable UUID id) {
-
-    }
+    public void delete(@PathVariable UUID id) {}
 
 }
