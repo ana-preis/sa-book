@@ -39,10 +39,10 @@ public class User implements UserDetails {
     @Column(name = "password_", nullable = false)
     private String password;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user")
     private Set<Review> reviewList = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
     @JoinTable(
         name = "user_category",
         joinColumns = @JoinColumn(name = "user_id"),
@@ -50,7 +50,7 @@ public class User implements UserDetails {
     )
     private Set<Category> subscriptions = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
     @JoinTable(
         name = "user_video_to_watch",
         joinColumns = @JoinColumn(name = "user_id"),
@@ -58,7 +58,7 @@ public class User implements UserDetails {
     )
     private Set<Video> toWatchList = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
     @JoinTable(
         name = "user_video_finished",
         joinColumns = @JoinColumn(name = "user_id"),
