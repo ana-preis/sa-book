@@ -18,7 +18,9 @@ public class AuthEntryPoint implements AuthenticationEntryPoint {
         HttpServletResponse response,
         AuthenticationException authException
     ) throws IOException {
-        if (response.getStatus() != HttpServletResponse.SC_FORBIDDEN) {
+        if (response.getStatus() == HttpServletResponse.SC_FORBIDDEN) {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Forbidden");
+        } else if (response.getStatus() == HttpServletResponse.SC_UNAUTHORIZED) {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
         }
     }

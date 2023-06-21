@@ -2,22 +2,21 @@ package com.sa.youtube.services;
 
 import java.util.*;
 
+import com.sa.youtube.dtos.*;
 import com.sa.youtube.models.Category;
 import com.sa.youtube.repositories.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.sa.youtube.dtos.UserOutDTO;
-import com.sa.youtube.dtos.UserPasswordUpdateDTO;
-import com.sa.youtube.dtos.UserInDTO;
-import com.sa.youtube.dtos.UserNameUpdateDTO;
 import com.sa.youtube.models.User;
 import com.sa.youtube.repositories.UserRepository;
 
 import jakarta.transaction.Transactional;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 @Service
 public class UserService {
@@ -34,6 +33,10 @@ public class UserService {
 
     @Transactional
     public UserOutDTO createUser(UserInDTO dto) {
+        Optional<UserDetails> userOpt = repository.findByEmail(dto.email());
+        if(userOpt.isPresent()) throw new IllegalArgumentException("Email já cadastrado");
+        Optional<UserDetails> user2Opt = repository.findByName(dto.username());
+        if(user2Opt.isPresent()) throw new IllegalArgumentException("Username já cadastrado");
         User user = new User(dto);
         user.setPassword(encoder.encode(dto.password()));
         return getUserOutDTO(repository.save(user));
@@ -46,7 +49,9 @@ public class UserService {
 
     @Transactional
     public UserOutDTO getUserOutDTO(User user) {
-        return new UserOutDTO(user, user.getSubscriptions().stream().map(Category::getId).toList());
+        var subscriptions = user.getSubscriptions().stream().map(Category::getId).toList();
+        var reviews = user.getReviewList().stream().map(ReviewOutDTO::new).toList();
+        return new UserOutDTO(user, subscriptions, reviews);
     }
 
     public Page<UserOutDTO> getUsers(Pageable page) {

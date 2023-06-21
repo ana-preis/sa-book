@@ -11,4 +11,11 @@ public record ErrorDTO(String field, String msg) {
         );
     }
 
+    public ErrorDTO(IllegalArgumentException err) {
+        this(
+                err.getLocalizedMessage(),
+                err.getMessage()
+        );
+    }
+
 }
