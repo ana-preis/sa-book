@@ -17,7 +17,7 @@ public interface VideoRepository extends JpaRepository<Video, String> {
 
     @Query(value = """
         SELECT *
-        FROM VIDEO v INNER JOIN VIDEO_CATEGORY vc ON
+        FROM video v INNER JOIN video_category vc ON
         v.id = vc.video_id
         WHERE vc.category_id = :id""",
         nativeQuery = true
@@ -26,7 +26,7 @@ public interface VideoRepository extends JpaRepository<Video, String> {
 
     @Query(value = """
         SELECT SUM(v.view_count)
-        FROM VIDEO v INNER JOIN VIDEO_CATEGORY vc ON
+        FROM video v INNER JOIN video_category vc ON
         v.id = vc.video_id
         WHERE vc.category_id = :id""",
         nativeQuery = true
@@ -35,7 +35,7 @@ public interface VideoRepository extends JpaRepository<Video, String> {
 
     @Query(value = """
         SELECT *
-        FROM VIDEO v INNER JOIN VIDEO_CATEGORY vc ON
+        FROM video v INNER JOIN video_category vc ON
         v.id = vc.video_id
         WHERE vc.category_id = :id
         AND (

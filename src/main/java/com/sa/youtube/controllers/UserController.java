@@ -27,12 +27,8 @@ public class UserController {
 
     @GetMapping("/{userID}")
     public ResponseEntity<UserOutDTO> getByID(@PathVariable UUID userID) {
-        try {
-            UserOutDTO user = service.getUserById(userID);
-            return new ResponseEntity<UserOutDTO>(user, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        UserOutDTO userOutDTO = service.getUserById(userID);
+        return new ResponseEntity<UserOutDTO>(userOutDTO, HttpStatus.OK);
     }
 
     @GetMapping
@@ -48,9 +44,12 @@ public class UserController {
     }
 
     @PatchMapping("/{userID}")
-    public ResponseEntity<UserOutDTO> update(@RequestBody @Valid UserNameUpdateDTO dto, @PathVariable UUID userID) {
-        UserOutDTO userDTO = service.updateUser(dto, userID);
-        return new ResponseEntity<UserOutDTO>(userDTO, HttpStatus.OK);
+    public ResponseEntity<?> update(@RequestBody @Valid UserNameUpdateDTO dto, @PathVariable UUID userID) {
+        if (service.updateUser(dto, userID)) {
+            UserOutDTO userOutDTO = service.getUserById(userID);
+            return new ResponseEntity<UserOutDTO>(userOutDTO, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
     }
 
     @PatchMapping("/{userId}/password")

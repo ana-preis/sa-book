@@ -1,7 +1,6 @@
 package com.sa.youtube.dtos;
 
 import java.util.List;
-import java.util.UUID;
 
 import com.google.api.services.youtube.model.SearchResult;
 import com.sa.youtube.models.Video;

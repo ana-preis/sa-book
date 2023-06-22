@@ -16,7 +16,6 @@ import com.sa.youtube.models.User;
 import com.sa.youtube.repositories.UserRepository;
 
 import jakarta.transaction.Transactional;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 
 @Service
 public class UserService {
@@ -60,10 +59,14 @@ public class UserService {
     }
 
     @Transactional
-    public UserOutDTO updateUser(UserNameUpdateDTO dto, UUID id) {
+    public Boolean updateUser(UserNameUpdateDTO dto, UUID id) {
         User user = repository.findById(id).orElseThrow();
-        user.setName(dto.username());
-        return getUserOutDTO(repository.save(user));
+        if (encoder.matches(dto.password(), user.getPassword())) {
+            user.setName(dto.username());
+            repository.save(user);
+            return true;
+        }
+        return false;
     }
 
     @Transactional
@@ -109,6 +112,12 @@ public class UserService {
         categoryRepository.save(category);
 
         return getUserOutDTO(saved);
+    }
+
+    @Transactional
+    public void createAdminUser() {
+        User admin = new User("admin", "admin@admin.com", encoder.encode("1234"));
+        repository.save(admin);
     }
 
 }

@@ -6,7 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,7 +17,6 @@ import com.sa.youtube.dtos.JWTResponseDTO;
 import com.sa.youtube.dtos.RefreshTokenDTO;
 import com.sa.youtube.dtos.UserOutDTO;
 import com.sa.youtube.models.User;
-import com.sa.youtube.repositories.UserRepository;
 import com.sa.youtube.services.TokenService;
 import com.sa.youtube.services.UserService;
 
