@@ -25,8 +25,8 @@ public interface ReviewRepository extends JpaRepository<Review, ReviewKey> {
     Long getReviewCount(@Param("videoId") String videoId);
 
     @Query("""            
-        SELECT new com.sa.youtube.dtos.ReviewOutDTO(r)
-        FROM Review r
+        SELECT new com.sa.youtube.dtos.ReviewOutDTO(r, u)
+        FROM Review r INNER JOIN r.user u
         WHERE r.id.videoId = :videoId
     """)
     List<ReviewOutDTO> getReviewDTOsByVideoId(@Param("videoId") String videoId);

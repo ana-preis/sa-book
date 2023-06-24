@@ -37,21 +37,26 @@ public class SecurityFilter extends OncePerRequestFilter {
         HttpServletResponse response,
         FilterChain filterChain
     ) throws IOException, ServletException {
-        
-        String accessToken = retrieveToken(request);
-        if (accessToken != null) {
-            Token token = tokenRepository.findByAccessToken(accessToken).orElseThrow();
-            String subject = tokenService.getSubject(accessToken);
-            UserDetails user = userRepository.findByEmail(subject).orElseThrow();
-            SecurityContextHolder.getContext().setAuthentication(
-                new UsernamePasswordAuthenticationToken(
-                    user,
-                    null,
-                    token.getUser().getAuthorities()
-                )
-            );
+        try {
+            String accessToken = retrieveToken(request);
+            if (accessToken != null && !request.getRequestURI().equals("/refresh")) {
+                Token token = tokenRepository.findByAccessToken(accessToken).orElseThrow();
+                String subject = tokenService.getSubject(accessToken);
+                UserDetails user = userRepository.findByEmail(subject).orElseThrow();
+                SecurityContextHolder.getContext().setAuthentication(
+                    new UsernamePasswordAuthenticationToken(
+                        user,
+                        null,
+                        token.getUser().getAuthorities()
+                    )
+                );
+            }
+            filterChain.doFilter(request, response);
+
+        } catch (Exception e) {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, e.getMessage());
         }
-        filterChain.doFilter(request, response);
+
     }
 
     private String retrieveToken(HttpServletRequest request) {

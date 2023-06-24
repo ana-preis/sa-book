@@ -35,7 +35,7 @@ public record CategoryDTO(
                 category.getId(),
                 category.getName(),
                 category.getDescription(),
-                null,
+                category.getUserList().size(),
                 null,
                 null,
                 null,

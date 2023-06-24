@@ -26,7 +26,8 @@ public record VideoInDTO(
             video.getSnippet().getDescription(),
             video.getSnippet().getPublishedAt().getValue(),
             video.getSnippet().getChannelTitle(),
-            video.getStatistics().getLikeCount().longValue(),
+            video.getStatistics().getLikeCount() != null ?
+            video.getStatistics().getLikeCount().longValue() : 0,
             video.getStatistics().getViewCount().longValue()
         );
     }

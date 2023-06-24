@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -60,10 +61,10 @@ public class UserController {
         return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
     }
 
-    @DeleteMapping("/{userID}")
-    public ResponseEntity<?> delete(@PathVariable UUID userID) {
-        service.deleteUser(userID);
-        return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+    @DeleteMapping
+    public ResponseEntity<?> delete(@RequestBody @Valid UserInDTO userForm, Authentication authentication) {
+        service.deleteUser(userForm, authentication);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PostMapping("/{userID}/categories/{categoryID}")

@@ -49,19 +49,22 @@ public class AuthenticationController {
         Authentication auth = manager.authenticate(
             new UsernamePasswordAuthenticationToken(data.email(), data.password())
         );
-        System.out.println(auth.toString());
-        return new ResponseEntity<JWTResponseDTO>(service.login((User) auth.getPrincipal()), HttpStatus.CREATED);
+        User user = (User) auth.getPrincipal();
+        JWTResponseDTO jwt = service.login(user.getId());
+        return new ResponseEntity<JWTResponseDTO>(jwt, HttpStatus.CREATED);
     }
 
     @PostMapping("/refresh")
     public ResponseEntity<JWTResponseDTO> refresh(@RequestBody @Valid RefreshTokenDTO dto) {
-        return new ResponseEntity<JWTResponseDTO>(service.refresh(dto.refreshToken()), HttpStatus.OK);
+        JWTResponseDTO jwt = service.refresh(dto.refreshToken());
+        return new ResponseEntity<JWTResponseDTO>(jwt, HttpStatus.OK);
     }
 
     @DeleteMapping("/revoke")
     public ResponseEntity<?> revoke(Authentication authentication) {
-        service.deleteByUser((User) authentication.getPrincipal());
-        return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+        User user = (User) authentication.getPrincipal();
+        service.deleteByUserId(user.getId());
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 }

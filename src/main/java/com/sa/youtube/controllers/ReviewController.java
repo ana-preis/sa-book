@@ -11,12 +11,12 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/reviews")
@@ -50,7 +50,10 @@ public class ReviewController {
         return new ResponseEntity<ReviewOutDTO>(reviewOutDTO, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable UUID id) {}
+    @DeleteMapping
+    public ResponseEntity<?> delete(@RequestBody @Valid ReviewInDTO dto, Authentication authentication) {
+        service.deleteReview(dto, authentication);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 
 }

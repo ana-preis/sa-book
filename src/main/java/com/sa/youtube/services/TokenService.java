@@ -56,15 +56,15 @@ public class TokenService {
         }
     }
     
-    public String getSubject(String tokenJWT) {
+    public String getSubject(String tokenJWT) {        
         try {
             Algorithm alg = Algorithm.HMAC256(SECRET);
             return JWT
-            .require(alg)
-            .withIssuer(ISSUER)
-            .build()
-            .verify(tokenJWT)
-            .getSubject();
+                .require(alg)
+                .withIssuer(ISSUER)
+                .build()
+                .verify(tokenJWT)
+                .getSubject();
         } catch (JWTVerificationException e) {
             throw new RuntimeException("Token is expired or not valid!", e);
         }
@@ -122,23 +122,27 @@ public class TokenService {
 
     @Transactional
     public void deleteByUserId(UUID userId) {
-        User user = userRepository.findById(userId).orElseThrow();
-        tokenRepository.deleteByUser(user);
-    }
-
-    @Transactional
-    public void deleteByUser(User user) {
-        tokenRepository.deleteByUser(user);
+        tokenRepository.deleteByUserId(userId);
     }
 
     public JWTResponseDTO login(User user) {
-        return new JWTResponseDTO(createToken(user));
+        Token token = createToken(user);
+        return new JWTResponseDTO(token);
     }
 
+    @Transactional
+    public JWTResponseDTO login(UUID userId) {
+        User user = userRepository.findById(userId).orElseThrow();
+        tokenRepository.deleteByUserId(user.getId());
+        Token token = createToken(user);
+        return new JWTResponseDTO(token);
+    }
+
+    @Transactional
     public JWTResponseDTO refresh(String refreshToken) {
         Token token = getByRefreshToken(refreshToken);
         User user = token.getUser();
-        deleteByUser(user);
+        tokenRepository.deleteByUserId(user.getId());
         if (isNotExpired(token)) {
             return new JWTResponseDTO(createToken(user));
         }

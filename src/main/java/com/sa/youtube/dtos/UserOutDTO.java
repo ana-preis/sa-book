@@ -11,6 +11,7 @@ public record UserOutDTO(
         UUID id,
         String username,
         String email,
+        String role,
         List<UUID> subscriptionsIDs,
         List<ReviewOutDTO> reviewList
 
@@ -21,6 +22,7 @@ public record UserOutDTO(
                 user.getId(),
                 user.getName(),
                 user.getEmail(),
+                user.getRole().toString(),
                 null, //user.getSubscriptions().stream().map(Category::getId).toList()
                 null
             );
@@ -31,6 +33,7 @@ public record UserOutDTO(
                 user.getId(),
                 user.getName(),
                 user.getEmail(),
+                user.getRole().toString(),
                 subs,
                 reviews
             );
