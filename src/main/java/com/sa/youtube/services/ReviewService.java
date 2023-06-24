@@ -17,6 +17,7 @@ import com.sa.youtube.repositories.VideoRepository;
 
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -117,6 +118,18 @@ public class ReviewService {
 
     public List<ReviewOutDTO> toReviewDTOList(Set<Review> reviews) {
         return reviews.stream().map(ReviewOutDTO::new).toList();
+    }
+
+    @Transactional
+    public void deleteReview(ReviewInDTO dto, Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+        if (user.getId().equals(dto.userId()) || user.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ADMIN"))) {
+            Review review = reviewRepository.findByUserIdVideoId(dto.userId(), dto.videoId());
+            reviewRepository.delete(review);
+            Video video = videoRepository.findById(dto.videoId()).orElseThrow();
+            updateVideoReviews(video);
+        }
+
     }
 
 }

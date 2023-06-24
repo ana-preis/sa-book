@@ -8,6 +8,7 @@ import com.sa.youtube.repositories.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -81,18 +82,24 @@ public class UserService {
     }
 
     @Transactional
-    public void deleteUser(UUID id) {
-        repository.deleteById(id);
+    public void deleteUser(UserInDTO dto, Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+        if (encoder.matches(dto.password(), user.getPassword()) &&
+            dto.email().equals(user.getEmail()) &&
+            dto.username().equals(user.getName())
+            ) {
+                user.setName("Deleted user");
+                user.setIsEnabled(false);
+                repository.save(user);
+            }
     }
 
     @Transactional
     public UserOutDTO saveCategoryToUser(UUID id, UUID categoryID) {
         User user = repository.findById(id).orElseThrow();
         Category category = categoryRepository.findById(categoryID).orElseThrow();
-        if (user.getSubscriptions().contains(category)) throw new RuntimeException();
-        Set<Category> subscriptions = new HashSet<>();
-        subscriptions.add(category);
-        user.setSubscriptions(subscriptions);
+
+        user.addCategory(category);
         return getUserOutDTO(repository.save(user));
     }
 
@@ -101,17 +108,8 @@ public class UserService {
         User user = repository.findById(id).orElseThrow();
         Category category = categoryRepository.findById(categoryID).orElseThrow();
 
-        Set<Category> newCategories = user.getSubscriptions();
-        newCategories.remove(category);
-        user.setSubscriptions(newCategories);
-        User saved = repository.save(user);
-
-        List<User> newUserList = category.getUserList();
-        newUserList.remove(user);
-        category.setUserList(newUserList);
-        categoryRepository.save(category);
-
-        return getUserOutDTO(saved);
+        user.removeCategory(category);
+        return getUserOutDTO(repository.save(user));
     }
 
     @Transactional

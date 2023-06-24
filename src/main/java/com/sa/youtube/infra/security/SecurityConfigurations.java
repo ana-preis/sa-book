@@ -52,10 +52,8 @@ public class SecurityConfigurations {
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> {
                 auth.requestMatchers(HttpMethod.GET, "/v3/*","/v3/api-docs/*", "/swagger-ui.html","/swagger-ui/*").permitAll();
-                auth.requestMatchers(HttpMethod.POST, "/login").permitAll();
-                auth.requestMatchers(HttpMethod.POST, "/users").permitAll();
-                auth.requestMatchers(HttpMethod.GET, "/categories").permitAll();
-                auth.requestMatchers(HttpMethod.GET, "/search").permitAll();
+                auth.requestMatchers(HttpMethod.POST, "/login", "/refresh", "/users").permitAll();
+                auth.requestMatchers(HttpMethod.GET, "/categories", "/search").permitAll();
                 auth.anyRequest().authenticated();
             })
             .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)

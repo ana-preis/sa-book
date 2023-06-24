@@ -42,6 +42,11 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user")
     private Set<Review> reviewList = new HashSet<>();
 
+    @Enumerated(EnumType.STRING)
+    private Role role = Role.ROLE_USER;
+
+    private Boolean isEnabled = true;
+
     @ManyToMany
     @JoinTable(
         name = "user_category",
@@ -66,9 +71,6 @@ public class User implements UserDetails {
     )
     private Set<Video> finishedList = new HashSet<>();
 
-    @Enumerated(EnumType.STRING)
-    private Role role = Role.ROLE_USER;
-
 
     public User(UserInDTO dto) {
         this.name = dto.username();
@@ -81,6 +83,14 @@ public class User implements UserDetails {
         this.email = email;
         this.password = password;
         this.role = Role.ROLE_ADMIN;
+    }
+
+    public Boolean addCategory(Category category) {
+        return this.subscriptions.add(category);
+    }
+
+    public Boolean removeCategory(Category category) {
+        return this.subscriptions.remove(category);
     }
 
 
@@ -116,7 +126,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return isEnabled;
     }
 
 }
