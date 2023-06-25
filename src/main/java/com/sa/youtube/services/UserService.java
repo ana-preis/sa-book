@@ -50,7 +50,7 @@ public class UserService {
     @Transactional
     public UserOutDTO getUserOutDTO(User user) {
         var subscriptions = user.getSubscriptions().stream().map(Category::getId).toList();
-        var reviews = user.getReviewList().stream().map(ReviewOutDTO::new).toList();
+        var reviews = user.getReviewList().stream().map((r) -> new ReviewOutDTO(r, user)).toList();
         return new UserOutDTO(user, subscriptions, reviews);
     }
 
@@ -113,9 +113,10 @@ public class UserService {
     }
 
     @Transactional
-    public void createAdminUser() {
-        User admin = new User("admin", "admin@admin.com", encoder.encode("1234"));
-        repository.save(admin);
+    public UserOutDTO createAdminUser() {
+        User admin = new User("admin", "admin@admin.com", encoder.encode("12345678"));
+        User saved = repository.save(admin);
+        return new UserOutDTO(saved);
     }
 
 }

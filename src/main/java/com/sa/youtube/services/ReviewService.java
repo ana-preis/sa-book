@@ -59,7 +59,7 @@ public class ReviewService {
         Review review = reviewRepository.save(new Review(dto, user, video));
         updateVideoReviews(video);
 
-        return new ReviewOutDTO(review);
+        return new ReviewOutDTO(review, user);
     }
     
     public ReviewOutDTO getById(ReviewKey id) {
