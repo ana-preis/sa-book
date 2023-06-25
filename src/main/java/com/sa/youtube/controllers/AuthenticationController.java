@@ -45,13 +45,18 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<JWTResponseDTO> login(@RequestBody @Valid JWTRequestDTO data) {
-        Authentication auth = manager.authenticate(
-            new UsernamePasswordAuthenticationToken(data.email(), data.password())
-        );
-        User user = (User) auth.getPrincipal();
-        JWTResponseDTO jwt = service.login(user.getId());
-        return new ResponseEntity<JWTResponseDTO>(jwt, HttpStatus.CREATED);
+    public ResponseEntity<?> login(@RequestBody @Valid JWTRequestDTO data) {
+        try {
+            Authentication auth = manager.authenticate(
+                new UsernamePasswordAuthenticationToken(data.email(), data.password())
+            );
+            System.out.println(auth);
+            User user = (User) auth.getPrincipal();
+            JWTResponseDTO jwt = service.login(user.getId());
+            return new ResponseEntity<JWTResponseDTO>(jwt, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping("/refresh")
