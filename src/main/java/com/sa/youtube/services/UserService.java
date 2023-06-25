@@ -5,6 +5,8 @@ import java.util.*;
 import com.sa.youtube.dtos.*;
 import com.sa.youtube.models.Category;
 import com.sa.youtube.repositories.CategoryRepository;
+import com.sa.youtube.repositories.ReviewRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,13 +24,16 @@ import jakarta.transaction.Transactional;
 public class UserService {
     
     @Autowired
-    private UserRepository repository;
-
-    @Autowired
     private BCryptPasswordEncoder encoder;
-
+    
     @Autowired
     private CategoryRepository categoryRepository;
+    
+    @Autowired
+    private ReviewRepository reviewRepository;
+
+    @Autowired
+    private UserRepository repository;
 
 
     @Transactional
@@ -42,9 +47,19 @@ public class UserService {
         return getUserOutDTO(repository.save(user));
     }
 
+    @Transactional
     public UserOutDTO getUserById(UUID id) {
+        //User user = repository.findById(id).orElseThrow();
+        return getUserOutDTO(id);
+    }
+
+    @Transactional
+    public UserOutDTO getUserOutDTO(UUID id) {
         User user = repository.findById(id).orElseThrow();
-        return getUserOutDTO(user);
+        //var subscriptions = user.getSubscriptions().stream().map(Category::getId).toList();
+        List<UUID> subscriptions = repository.getSubscriptions(id);
+        List<ReviewOutDTO> reviews = reviewRepository.getReviewDTOsByUserId(id);
+        return new UserOutDTO(user, subscriptions, reviews);
     }
 
     @Transactional

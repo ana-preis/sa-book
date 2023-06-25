@@ -32,10 +32,10 @@ public interface ReviewRepository extends JpaRepository<Review, ReviewKey> {
     List<ReviewOutDTO> getReviewDTOsByVideoId(@Param("videoId") String videoId);
 
     @Query("""            
-        SELECT new com.sa.youtube.dtos.ReviewOutDTO(r)
-        FROM Review r
+        SELECT new com.sa.youtube.dtos.ReviewOutDTO(r, u)
+        FROM Review r INNER JOIN r.user u
         WHERE r.id.userId = :userId
     """)
-    List<ReviewOutDTO> getReviewDTOsByUserId(@Param("userId") String userId);
+    List<ReviewOutDTO> getReviewDTOsByUserId(@Param("userId") UUID userId);
 
 }
