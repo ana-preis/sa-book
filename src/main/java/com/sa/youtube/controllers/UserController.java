@@ -79,4 +79,10 @@ public class UserController {
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
+    @PostMapping("/admin")
+    public ResponseEntity<UserOutDTO> createAdmin() {
+        UserOutDTO dto = service.createAdminUser();
+        return new ResponseEntity<>(dto, HttpStatus.OK);
+    }
+
 }
